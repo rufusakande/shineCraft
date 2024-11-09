@@ -1,0 +1,23 @@
+section a button{
+    padding: 10px;
+    border-radius: 4px;
+    background-color: blue;
+    border: 1px solid blue;
+    color: white;
+}
+
+section .container2{
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(1, 1fr);
+    gap: 15px;
+    padding: 30px 3%px;
+}
+
+section .container2 table tr td a button{
+    padding: 5px;
+    border-radius: 4px;
+    background-color: blue;
+    border: 1px solid blue;
+    color: white;
+}

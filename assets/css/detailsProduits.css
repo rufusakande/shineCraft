@@ -1,0 +1,306 @@
+/**
+ * La section details
+ */
+
+
+.details .heading{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0px 0px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.details .heading h2{
+    border-bottom: 3px solid var(--primaryColor);
+}
+
+.details .boxLeft{
+    padding: 20px 5px;
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    gap: 20px;
+    flex-wrap: wrap;
+    color: black;
+}
+
+.details .boxLeft .img{
+    width: fit-content;
+}
+
+.details .boxLeft img{
+    object-fit: cover;
+    object-position: center;
+    max-width: 550px;
+    max-height: 350px;
+}
+
+.details .boxLeft .img .rowImg{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 5px;
+}
+
+.details .boxLeft .img .rowImg img{
+    width: 80px;
+    height: 70px;
+    object-fit: contain;
+}
+
+.details .boxLeft .infos{
+    padding-left: 15px;
+    font-size: 16px;
+    width: fit-content;
+}
+
+.details .boxLeft .infos h3{
+    font-weight: 700;
+    color: blue;
+    font-size: 22px;
+    margin-bottom: 15px;
+}
+
+.details .boxLeft .infos svg{
+    color: var(--primaryColor);
+    margin-bottom: 10px;
+}
+
+.details .boxLeft .infos .btnQuantite{
+    padding: 5px 0px;
+}
+
+.details .boxLeft .infos .btnQuantite button{
+    padding: 0px 0px 5px 0px;
+    width: 40px;
+    height: 40px;
+    font-size: 24px;
+    color: white;
+}
+
+.details .boxLeft .infos .btnQuantite .moins{
+    background-color: red;
+    border: 1px solid red;
+}
+
+.details .boxLeft .infos .btnQuantite .plus{
+    background-color: green;
+    border: 1px solid green;
+}
+
+.details .boxLeft .infos .btnQuantite span{
+    padding: 0px 10px;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.details .boxLeft .infos .prix{
+    font-weight: 700;
+    font-size: 19px;
+    color: blue;
+}
+
+.details form button{
+    padding: 10px;
+    border: 1px solid var(--primaryColor);
+    background-color: var(--primaryColor);
+    border-radius: 5px;
+    margin: 10px 0px;
+}
+
+.details .boxLeft .infos ul{
+    margin-top: 10px;
+    padding-left: 0px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    gap: 20px;
+}
+
+.details .boxLeft .infos ul li{
+    padding-bottom: 5px;
+    border-bottom: black solid 4px;
+}
+
+.details .boxLeft .infos a button{
+    padding: 10px 15px;
+    margin: 20px 0px;
+    border-radius: 5px;
+    border: 1px solid var(--primaryColor);
+    background-color: var(--primaryColor);
+    color: black;
+    box-shadow: 0px 0px 3px 3px goldenrod;
+    text-align: center;
+}
+
+/**
+ * La section top vendu
+ */
+
+.topVendus{
+    padding: 30px 4% 50px;
+}
+
+.topVendus .heading{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0px 0px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.topVendus .heading h2{
+    border-bottom: 3px solid var(--primaryColor);
+}
+
+.topVendus .heading ul{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 35px;
+    width: fit-content;
+    margin: 0px;
+    padding: 0px;
+}
+
+.topVendus .heading .filtreMobile{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+}
+
+@media screen and (max-width: 750px) {
+    .topVendus .heading ul{
+        display: none;
+    }
+
+    .topVendus .heading .filtreMobile{
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 350px){
+    .topVendus .heading h2{
+        font-size: 18px;
+    }
+}
+
+.topVendus .heading .filtreMobile select{
+    border-radius: 5px;
+    padding: 2px 4px;
+}
+
+.topVendus .heading ul li{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.topVendus .heading ul .active{
+    color: var(--primaryColor);
+    border-bottom: 3px solid var(--primaryColor);
+}
+
+.topVendus .row{
+    width: 100%;
+    padding: 30px 0px 10px;
+    display: grid;
+    gap: 15px;
+    grid-row-start: auto;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+.topVendus .row .produit{
+    box-shadow: 0px 0px 8px 3px rgb(243, 243, 243);
+}
+
+.topVendus .row .produit img{
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 140px;
+}
+
+.topVendus .row .produit .infos{
+    padding: 5px;
+    font-size: 12px;
+}
+
+.topVendus .row .produit .infos h3{
+    font-weight: 700;
+    color: var(--secondaryColor);
+}
+
+.topVendus .row .produit .infos svg{
+    color: var(--primaryColor);
+}
+
+.topVendus .row .produit .infos .prix{
+    font-weight: 700;
+    font-size: 16px;
+}
+
+@media screen and (max-width:350px) {
+    .details .boxLeft{
+        width: 100%;
+    }
+
+    .details .boxLeft img{
+        width: 100%;
+    }
+}
+
+#modal{
+    width: fit-content;
+    padding: 15px;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
+    border-radius: 7px;
+    position: absolute;
+    top: -100%;
+    left: 20%;
+    text-align: center;
+    transition: all 0.7s;
+}
+
+#modal .titre{
+    font-size: 22px;
+    font-weight: 700;
+}
+
+#modal .titre + p{
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+#modal .btn{
+    padding: 10px;
+    border-radius: 7px;
+}
+
+
+
+#modal .non{
+    padding: 10px;
+    border: 1px solid gray;
+    background-color: gray;
+    color: black;
+    margin-right: 10px;
+}
+
+#modal .oui{
+    padding: 10px;
+    border: 1px solid red;
+    background-color: red;
+    box-shadow: none;
+    color: white;
+    
+}

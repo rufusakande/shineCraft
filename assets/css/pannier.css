@@ -1,0 +1,65 @@
+section{
+    padding: 50px 10%;
+}
+
+section table{
+    border-collapse: collapse;
+    width: 100%;
+}
+
+section table tr{
+    width: 100%;
+    background-color: rgb(216, 255, 222);
+    border-bottom: 5px solid white;
+}
+
+section table tr td{
+    padding: 10px;
+}
+
+section table tr td .delete{
+    color: red;
+    font-size: 22px;
+    font-weight: 600;
+}
+
+section table tr img{
+    width: 40px;
+    height: 30px;
+    object-fit: contain;
+}
+
+section .total{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 8px;
+    padding: 10px;
+    background-color: rgb(246, 255, 245);
+}
+
+section .total p{
+    font-size: 22px;
+    font-weight: 500;
+}
+
+section .total p span{
+    color: green;
+}
+
+section .btnCommande{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 0px;
+}
+
+section .btnCommande button{
+    padding: 10px;
+    border: 1px solid green;
+    background-color: green;
+    border-radius: 5px;
+    color: white;
+}

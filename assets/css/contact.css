@@ -1,0 +1,114 @@
+/**
+ * La section contact
+ */
+
+.contact .text{
+    width: 100%;
+    max-height: auto;
+    background-image: url(../images/bgContact.webp);
+    background-position: center;
+    background-size: cover;
+}
+
+.contact .text div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px 5px;
+    height: 100%;
+    width: 100%;
+    margin: 0px;
+    background-color: rgba(0, 0, 0, 0.521);
+}
+
+.contact .text div h3{
+    font-size: clamp(32px, 38px, 46px);
+    font-weight: 700;
+    color: var(--primaryColor);
+    margin-bottom: 30px;
+}
+
+.contact .text div h3 + p{
+    font-size: clamp(15px, 18px, 21px);
+    font-weight: 400;
+    max-width: 600px;
+    color: white;
+}
+
+.contact .row{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    margin: 20px 0px 50px;
+}
+
+.contact .row .box{
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 40px 25px;
+    border-radius: 25px;
+    background-color: var(--secondaryColor);
+    box-shadow: 0px 0px 5px 4px rgb(236, 236, 236);
+    transition: all .7s;
+}
+
+.contact .row .box svg{
+    color: var(--primaryColor);
+}
+
+.contact .row .box h3{
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primaryColor);
+}
+
+.contact .row .box a{
+    color: white; 
+    font-size: 19px;
+    font-weight: 600;
+    text-decoration: underline;
+}
+
+.contact .row .box:hover,
+.contact .row .active{
+    transition: all .8s;
+    background-color: gold;
+}
+
+.contact .row .box:hover h3,
+.contact .row .box:hover svg,
+.contact .row .box:hover a,
+.contact .row .active h3,
+.contact .row .active svg,
+.contact .row .active a{
+    color: black;
+}
+
+.contact .row .active:hover{
+    transition: all .8s;
+    background-color: var(--secondaryColor);
+}
+
+.contact .row .active:hover svg{
+    color: var(--primaryColor);
+}
+
+.contact .row .active:hover h3{
+    color: var(--primaryColor);
+}
+
+.contact .row .active:hover a{
+    color: white;
+}
+
+.contact .row .box a:hover{
+    color: blue;
+}

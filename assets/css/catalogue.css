@@ -1,0 +1,644 @@
+/**
+ * La sections tendances
+ */
+
+.tendances{
+    padding: 50px 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.tendances h3{
+    font-size: clamp(32px, 38px, 46px);
+    font-weight: 700;
+    color: var(--primaryColor);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.tendances h3 + p{
+    text-align: center;
+    font-size: clamp(18px, 21px, 23px);
+    font-weight: 500;
+    max-width: 600px;
+    margin-bottom: 75px;
+}
+
+.tendances .row{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 25px;
+    justify-content: space-around;
+}
+
+.tendances .row .box{
+    width:95vw;
+    height:320px ;
+    border-radius: 15px;
+    box-shadow: 0px 0px 5px 7px rgba(209, 209, 209, 0.877);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    background-position: center;
+    background-image: url(../images/produits5.webp);
+}
+
+.tendances .row .box em{
+    width: fit-content;
+    font-size: 14px;
+    font-weight: 700;
+    position: relative;
+    bottom: -40%;
+    right: -40%;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.527);
+}
+
+/**
+ * La sections rowGrid1
+ */
+
+.rowGrid1{
+    padding: 50px 2% 25px;
+    display: grid;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.rowGrid1 .box{
+    display: flex;
+    align-items: start;
+    justify-content: start;
+    gap: 20px;
+    padding: 10px;
+    border-left: 1px solid rgb(187, 187, 187);
+}
+
+.rowGrid1 .box h2{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.rowGrid1 .box p{
+    font-size: 14px;
+}
+
+.rowGrid1 .box svg{
+    width: 50px;
+    height: 50px;
+    color: var(--primaryColor);
+}
+
+/**
+ * La sections rowGrid2
+ */
+
+.rowGrid2{
+    padding: 50px 4% 25px;
+    display: grid;
+    gap: 35px;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.rowGrid2 .box{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+    background-size: cover;
+    color: white;
+    height: 170px;
+}
+
+.rowGrid2 .box div{
+    background-color: rgba(0, 0, 0, 0.397);
+}
+
+.rowGrid2 .box1{
+    background-image: url(../images/bg5.webp);
+}
+
+.rowGrid2 .box2{
+    background-image: url(../images/bg4.webp);
+}
+
+.rowGrid2 .box3{
+    background-image: url(../images/bg5.webp);
+}
+
+.rowGrid2 .box h2{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.rowGrid2 .box p{
+    font-size: 16px;
+}
+
+.rowGrid2 .box .texte{
+    margin-top: 10px;
+}
+
+/**
+ * La section produits
+ */
+
+.produits{
+    padding: 50px 7px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+.produits h2{
+    font-size: clamp(32px, 38px, 46px);
+    font-weight: 700;
+    color: var(--primaryColor);
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.produits h2 + p{
+    text-align: center;
+    font-size: clamp(18px, 20px, 21px);
+    font-weight: 400;
+    max-width: 600px;
+    margin-bottom: 75px;
+}
+
+.produits .row{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
+.produits .row .box{
+    width: 300px;
+    border-radius: 15px;
+    text-align: left;
+    box-shadow: 0px 0px 5px 4px rgb(236, 236, 236);
+}
+
+.produits .row .box .image{
+    width: 100%;
+    height: 300px;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border-radius: 15px 15px 0px 0px;
+}
+
+.produits .row .box .image div{
+    width: fit-content;
+    padding: 5px 10px;
+    background-color: var(--primaryColor);
+    color: black;
+    border-radius: 0px 15px 15px 0px;
+    position: relative;
+    top: 20px;
+    left: 0px;
+}
+
+.produits .row .box .info{
+    color: black;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+    padding: 8px 0px;
+}
+
+.produits .row .box .icones{
+    color: var(--primaryColor);
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.produits a .btn1{
+    padding: 15px;
+    margin: 50px 0px;
+    border: 1px solid var(--primaryColor);
+    background-color: var(--primaryColor);
+    transition: all .8s;
+    box-shadow: 0px 0px 3px 5px rgb(255, 243, 176); 
+    border-radius: 10px;
+}
+
+.produits a .btn1:hover{
+    box-shadow: 0px 0px 7px 8px rgb(255, 234, 117); 
+    transition: all .8s;
+}
+
+/**
+ * La sections rowGrid3
+ */
+
+.rowGrid3{
+    padding: 50px 4% 25px;
+    display: grid;
+    gap: 35px;
+    grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.rowGrid3 .box{
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 10px;
+    background-size: cover;
+    color: white;
+    height: 170px;
+}
+
+.rowGrid3 .box .content{
+    background-color: rgba(0, 0, 0, 0.411);
+}
+
+.rowGrid3 .box1{
+    background-image: url(../images/bg5.webp);
+}
+
+.rowGrid3 .box2{
+    background-image: url(../images/bg4.webp);
+}
+
+.rowGrid3 .box h2{
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.rowGrid3 .box p{
+    font-size: 16px;
+    color: var(--primaryColor);
+}
+
+.rowGrid3 .box .texte{
+    margin-top: 10px;
+    color: white;
+}
+
+/**
+ * La section top vendu
+ */
+
+.topVendus{
+    padding: 30px 4% 50px;
+}
+
+.topVendus .heading{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0px 0px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.topVendus .heading h2{
+    border-bottom: 3px solid var(--primaryColor);
+}
+
+.topVendus .heading ul{
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 35px;
+    width: fit-content;
+    margin: 0px;
+    padding: 0px;
+}
+
+.topVendus .heading .filtreMobile{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+
+}
+
+@media screen and (max-width: 750px) {
+    .topVendus .heading ul{
+        display: none;
+    }
+
+    .topVendus .heading .filtreMobile{
+        display: flex;
+    }
+}
+
+@media screen and (max-width: 350px){
+    .topVendus .heading h2{
+        font-size: 18px;
+    }
+}
+
+.topVendus .heading .filtreMobile select{
+    border-radius: 5px;
+    padding: 2px 4px;
+}
+
+.topVendus .heading ul li{
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.topVendus .heading ul .active{
+    color: var(--primaryColor);
+    border-bottom: 3px solid var(--primaryColor);
+}
+
+.topVendus .row{
+    width: 100%;
+    padding: 30px 0px 10px;
+    display: grid;
+    gap: 15px;
+    grid-row-start: auto;
+    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+}
+
+.topVendus .row .produit{
+    text-align: center;
+    box-shadow: 0px 0px 8px 3px rgb(243, 243, 243);
+}
+
+.topVendus .row .produit img{
+    object-fit: cover;
+    object-position: center;
+    width: 100%;
+    height: 140px;
+}
+
+.topVendus .row .produit .infos{
+    padding: 5px;
+    font-size: 14px;
+}
+
+.topVendus .row .produit .infos h3{
+    font-weight: 700;
+    color: var(--secondaryColor);
+}
+
+.topVendus .row .produit .infos svg{
+    color: var(--primaryColor);
+    width: 10px;
+    height: 10px;
+    margin: 10px 0px;
+}
+
+.topVendus .row .produit .infos .prix{
+    font-weight: 700;
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: blue;
+}
+
+/**
+ * La section nouveautés
+ */
+
+.nouveautes{
+    padding: 30px 4% 50px;
+    background-color: rgb(248, 248, 248);
+}
+
+.nouveautes .heading{
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 0px 0px;
+    border-bottom: 1px solid rgb(221, 221, 221);
+}
+
+.nouveautes .heading h2{
+    border-bottom: 3px solid var(--primaryColor);
+}
+
+.nouveautes .row{
+    padding: 20px 0px;
+    display: grid;
+    grid-gap: 20px;
+    justify-content: center;
+    grid-template-columns: repeat(2, 600px);
+}
+
+.nouveautes .row .boxLeft{
+    padding: 15px;
+    display: grid;
+    grid-gap: 0px;
+    max-width: 600px;
+    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
+    box-shadow: 0px 0px 3px 3px rgb(238, 238, 238);
+    float: inline-start;
+}
+
+.nouveautes .row .boxLeft .aLeft{
+    color: black;
+}
+
+.nouveautes .row .boxLeft img{
+    object-fit: cover;
+    object-position: center;
+    max-width: 320px;
+}
+
+.nouveautes .row .boxLeft .infos{
+    padding-left: 15px;
+    font-size: 16px;
+    width: fit-content;
+}
+
+.nouveautes .row .boxLeft .infos h3{
+    font-weight: 700;
+    color: blue;
+    margin-bottom: 15px;
+}
+
+.nouveautes .row .boxLeft .infos svg{
+    color: var(--primaryColor);
+    margin-bottom: 10px;
+}
+
+.nouveautes .row .boxLeft .infos .prix{
+    font-weight: 700;
+    font-size: 16px;
+    color: brown;
+}
+
+.nouveautes .row .boxLeft .infos ul{
+    margin-top: 10px;
+    padding-left: 20px;
+    margin-bottom: 30px;
+}
+
+.nouveautes .row .boxLeft .infos ul li{
+    margin-bottom: 10px;
+    list-style: circle;
+}
+
+.nouveautes .row .boxLeft .infos .btnDiv{
+    text-align: center;
+}
+
+.nouveautes .row .boxLeft .infos a button{
+    padding: 10px 15px;
+    border-radius: 10px;
+    border: 1px solid var(--primaryColor);
+    background-color: var(--primaryColor);
+    color: black;
+    box-shadow: 0px 0px 3px 3px goldenrod;
+    text-align: center;
+}
+
+.nouveautes .row .boxRight{
+    display: grid;
+    gap: 15px;
+    justify-content: center;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.nouveautes .row .boxRight .box{
+    padding: 15px;
+    display: grid;
+    grid-template-columns: repeat(2, auto);
+    width: fit-content;
+    box-shadow: 0px 0px 3px 3px rgb(238, 238, 238);
+}
+
+.nouveautes .row .boxRight .box img{
+    object-fit: cover;
+    object-position: center;
+    max-width:140px;
+}
+
+.nouveautes .row .boxRight .box .infos{
+    padding-left: 10px;
+    font-size: 12px;
+    max-width: fit-content;
+}
+
+.nouveautes .row .boxRight .box .infos h3{
+    font-weight: 700;
+    color: blue;
+    margin-bottom: 5px;
+}
+
+.nouveautes .row .boxRight .box .infos svg{
+    color: var(--primaryColor);
+    margin-bottom: 3px;
+}
+
+.nouveautes .row .boxRight .infos .prix{
+    font-weight: 700;
+    font-size: 14px;
+    color: brown;
+}
+
+@media screen and (max-width:1305px) {
+    .nouveautes .row{
+        grid-template-columns: repeat(1, 600px);
+    }
+}
+
+
+
+@media screen and (min-width:1150px) {
+    .tendances .row .box{
+        height: 450px;
+    }
+    .tendances .row .box em{
+        right: -42%;
+        bottom: -42%;
+    }
+}
+
+@media screen and (max-width:650px) {
+    .tendances .row .box{
+        height: 260px;
+        width: 90vw;
+    }
+
+    .nouveautes .row{
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+    .nouveautes .row .boxLeft{
+        justify-content: center;
+        gap: 10px;
+        display: flex;
+        align-items: start;
+        justify-content: center;
+        gap: 15px;
+        flex-wrap: wrap;
+        flex-direction: column;
+    }
+
+    .nouveautes .row .boxRight{
+        grid-template-columns: repeat(1, auto);
+    }
+}
+
+@media screen and (max-width:500px) {
+    .tendances .row .box{
+        height: 230px;
+        width: 96vw;
+    }
+
+    .tendances .row .box em{
+        right: -35%;
+        bottom: -40%;
+    }
+}
+
+@media screen and (max-width:400px) {
+    .tendances .row .box{
+        height: 200px;
+        width: 96vw;
+    }
+    .tendances .row .box em{
+        right: -35%;
+        bottom: -40%;
+    }
+}
+
+@media screen and (max-width:350px) {
+    .tendances .row .box{
+        height: calc(170px);
+        width: 96vw;
+    }
+    .tendances .row .box em{
+        bottom: -40%;
+    }
+
+    .nouveautes .row .boxLeft{
+        width: 100%;
+    }
+
+    .nouveautes .row .boxLeft img{
+        width: 100%;
+    }
+
+    .nouveautes .row .boxRight{
+        width: 100%;
+    }
+
+    .nouveautes .row .boxRight .box{
+        width: 100%;
+    }
+
+    .nouveautes .row .boxRight .box img{
+        max-width: 100%;
+    }
+}
