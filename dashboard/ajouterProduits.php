@@ -34,7 +34,11 @@
                 <span class="row">
                     <span class="col">
                         <label class="label" for="categorie">Catégorie</label>
-                        <input type="text" id="categorie" name="categorie" placeholder="La catégorie du produit" minlength="2" required>
+                        <select id="categorie" name="categorie" id="options">
+                            <option value="colliers">Colliers</option>
+                            <option value="bracelets">Bracelets</option>
+                            <option value="bagues">Bagues</option>
+                        </select>
                     </span>
                     <span class="col">
                         <label class="label" for="prix">Le prix</label>
@@ -65,12 +69,8 @@
 
     <?php
         if (isset($_POST['ajouterProduits'])) {
-            //Connexion à la base de donnée
-            $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-
-            if($conn->connect_error) {
-                die("Erreur lors de la connexion à la base de données". $conn->connect_error);
-            }
+            //connexion à la base de données
+            include("../connexionDB.php");
 
             //Récupération des données du formulaire
             $nomProduit = $_POST['nomProduit'];

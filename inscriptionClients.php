@@ -78,17 +78,7 @@
 
     <?php
         // Connexion à la base de données
-        $servername = "localhost"; // Remplacez par votre serveur
-        $usernameDB = "root"; // Remplacez par votre nom d'utilisateur MySQL
-        $passwordDB = ""; // Remplacez par votre mot de passe MySQL
-        $dbname = "shinecraft"; // Remplacez par le nom de votre base de données
-
-        $conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
-
-        // Vérifier la connexion
-        if ($conn->connect_error) {
-            die("Connexion échouée: " . $conn->connect_error);
-        }
+        include("connexionDB.php");
 
         // S'assurer que l'encodage est correct
         $conn->set_charset("utf8mb4");
@@ -125,7 +115,10 @@
                         $quantite = intval($_GET['quantite']);
                         header("Location: ajouterPanier.php?idProduit=".$idProduit."&quantite=".$quantite."");
                         exit();
-                    } else{
+                    } else if (isset($_GET['src']) ) {
+                        header("Location: panier.php");
+                        exit();
+                    } else {
                         // Rediriger l'utilisateur vers la page protégée
                         header("Location: profilClients.php");
                         exit();

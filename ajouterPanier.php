@@ -1,11 +1,15 @@
 <?php
     session_start();
-    $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-    
-    // Vérifier la connexion à la base de données
-    if($conn->connect_error) {
-        die("Erreur de connexion : " . $conn->connect_error);
+    if (!isset($_SESSION['user_id'])) {
+        if (isset($_GET['idProduit']) && isset($_GET['quantite'])) {
+            $idProduit = isset($_POST['idProduit']) ? $_POST['idProduit'] : intval($_GET['idProduit']);
+            $quantite = isset($_POST['quantite']) ? $_POST['quantite'] : intval($_GET['quantite']);
+            header("Location: authentificationClients.php?idProduit=".$idProduit."&quantite=".$quantite.""); // Rediriger vers la page de connexion si non connecté
+            exit();
+        }     
+        
     }
+    include("connexionDB.php");
     
     // Vérifier si l'utilisateur est connecté
     if (isset($_SESSION['user_id'])) {

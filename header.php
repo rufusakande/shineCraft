@@ -1,5 +1,21 @@
+<?php 
+    if (session_status() == PHP_SESSION_NONE) {
+        session_start();
+    }
+    include("connexionDB.php");
+    
+    $idUtilisateur = $_SESSION['user_id'] ?? null;
+    function panierEstVide($conn, $idUtilisateur) {
+        $sql = "SELECT COUNT(*) as total FROM panier WHERE idUtilisateur = ? AND commande = 0";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param('i', $idUtilisateur);
+        $stmt->execute();
+        $result = $stmt->get_result()->fetch_assoc();
+        return ($result['total'] > 0); // Retourne true si le panier n'est pas vide
+    }
+?>
 <header>
-        <p class="logo"><span>Shine</span>Craft</p>
+        <p class="logo"><a style="color: black;" href="index.php"><span>Shine</span>Craft</a></p>
         <ul class="menu" id="menu">
             <li><a class="active" href="index.php">Accueil</a></li>
             <li><a href="catalogue.php">Catalogue</a></li>
@@ -23,11 +39,18 @@
                 
             </li>
             <li>
-                <a href="panier.php">
+                <a href="panier.php" class="panier-wrapper">
                     <span>.</span>
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-cart4" title="L'icone pour le panie d'achat" viewBox="0 0 16 16">
                         <path d="M0 2.5A.5.5 0 0 1 .5 2H2a.5.5 0 0 1 .485.379L2.89 4H14.5a.5.5 0 0 1 .485.621l-1.5 6A.5.5 0 0 1 13 11H4a.5.5 0 0 1-.485-.379L1.61 3H.5a.5.5 0 0 1-.5-.5M3.14 5l.5 2H5V5zM6 5v2h2V5zm3 0v2h2V5zm3 0v2h1.36l.5-2zm1.11 3H12v2h.61zM11 8H9v2h2zM8 8H6v2h2zM5 8H3.89l.5 2H5zm0 5a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0m9-1a1 1 0 1 0 0 2 1 1 0 0 0 0-2m-2 1a2 2 0 1 1 4 0 2 2 0 0 1-4 0"/>
                     </svg>
+                    <?php if (isset($_SESSION['user_id']) && panierEstVide($conn, $_SESSION['user_id'])): ?>
+                        <em class="panier-notif">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" fill="red" class="bi bi-circle-fill" viewBox="0 0 16 16">
+                                <circle cx="8" cy="8" r="8"/>
+                            </svg>
+                        </em>
+                    <?php endif; ?>
                 </a>
                 
             </li>

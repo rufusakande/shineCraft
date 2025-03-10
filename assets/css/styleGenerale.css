@@ -113,6 +113,36 @@ header .menuFermant{
 }
 
 /**
+ * Icon pour indiqué qu'il existe des produit dans le panier
+ */
+
+.panierFull{
+    color: red;
+    width: 25px;
+    position: relative;
+    left: -22px;
+    top: -8px;
+
+}
+
+.panier-wrapper {
+    position: relative; /* Pour que l'icône de notification soit bien positionnée */
+    display: inline-block;
+}
+
+.panier-notif {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background-color: red;
+    width: 10px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/**
  * Main
  */
 

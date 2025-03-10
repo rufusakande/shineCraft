@@ -13,11 +13,7 @@
     <?php 
         include("header.php");
         //connexion à la base de données
-        $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-
-        if ($conn->connect_error){
-            die("Erreur de connexion : ". $conn->connect_error);
-        }
+        include("connexionDB.php");
     ?>
 
     <main>
@@ -105,7 +101,7 @@
                     if ($results1->num_rows > 0) {
                         while ($row1 = $results1->fetch_assoc()){
                                 $photosrec = unserialize($row1['photos']);
-                                echo"
+                                echo"<a class='aLeft' href='detailsProduits.php?idProduit=".$row1['id']."'>
                                     <div class='produit'>
                                         <img src='dashboard/".$photosrec[0]."' alt=".$row1['nomProduit'].">
                                         <div class='infos'>
@@ -130,6 +126,7 @@
                                             <p class='prix'>".$row1['prix']."<span>FCFA</span></p>
                                         </div>
                                     </div>
+                                    </a>
                                 ";
                         }
                     }else{

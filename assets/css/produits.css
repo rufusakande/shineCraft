@@ -1,9 +1,17 @@
 section a button{
     padding: 10px;
-    border-radius: 4px;
-    background-color: blue;
-    border: 1px solid blue;
-    color: white;
+    box-shadow: 2px 2px 3px 2px rgb(126, 126, 126);
+    border-radius: 6px;
+    background-color: rgb(255, 226, 61);
+    border: 1px solid rgb(255, 224, 47);
+    color: black;
+    transition: all .5s;
+}
+
+section a button:hover{
+    background-color: white;
+    box-shadow: 2px 2px 3px 2px rgb(192, 186, 151);
+    transition: all .5s;
 }
 
 section .container2{

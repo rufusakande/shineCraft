@@ -25,11 +25,7 @@
             include("nav.php");
 
             //connexion à la base de données
-            $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-
-            if ($conn->connect_error){
-                die("Erreur de connexion : ". $conn->connect_error);
-            }
+            include("../connexionDB.php");
 
             $sql = "SELECT * FROM produits ORDER BY id DESC";
             $results = $conn->query($sql);

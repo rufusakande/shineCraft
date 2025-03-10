@@ -1,0 +1,6 @@
+1 - Au niveau de la page commande, le formulaire d'ajout des commandes, il faut revoir les erreur php qui s'affiche et les corriger.
+2 - Revoir les redirections après la connexion .........
+3 - Faire en sorte que lorsqu'on clique sur ajouter un produit au panier et l'utilisateurs est rediriger vers la page de connexion, qu'il puise être redirigervers la page du produits une fois connecté ou que le produits soit ajouter au panier(même chose lorsqu'il est obligé de s'inscrir s'il ne l'avait pas fait)
+4 - Sur la page commande, implémenter la fonctionnalité qui permet de choisir le lieux de livraison lorsqu'on clique sur livré. At ajouter aussi le google map(la carte)
+5 - Pour les connexions et inscription ajouter une option pour cacher et afficher les mots de passe 
+6 - .................

@@ -20,7 +20,7 @@
             <div class="box2">
                 <?php
                     if (isset($_GET['idProduit']) && isset($_GET['quantite'])) {
-                        echo "<h2 style='text-align:center;padding:5px;'>Vous devriez vous connecter à votre compte afin de pouvoir ajouter les produits dans le panier</h2>";
+                        echo "<h2 style='text-align:center; margin-top:-53px'>Vous devriez vous connecter à votre compte afin de pouvoir ajouter les produits dans le panier</h2>";
                     } else{
                         echo "<h2>Connexion</h2>";
 
@@ -35,8 +35,9 @@
                         <label class="label" for="passWord">Mot de passe</label>
                         <input type="password" id="passWord" name="passWord" placeholder="Votre mot de passe" minlength="6" required>
                     </span>
+                    <a class="passWordOublier" href="#"> Mot de passe oublié?</a>
                     <span>
-                        <input type="checkbox" name="terms" id="terms" required>
+                        <input type="checkbox" name="terms" id="terms">
                         <label for="terms">Rester connecter</label>
                     </span>
 
@@ -47,7 +48,10 @@
                         $idProduit = intval($_GET['idProduit']);
                         $quantite = intval($_GET['quantite']);
                         echo "<p>Vous n'avez pas de compte? <a href='inscriptionClients.php?idProduit=".$idProduit."&quantite=".$quantite."'>Inscrivez-vous</a></p>";
-                    } else{
+                    } else if (isset($_GET['src']) ) {
+                        $src = $_GET['src'];
+                        echo "<p>Vous n'avez pas de compte? <a href='inscriptionClients.php?src=".$src."'>Inscrivez-vous</a></p>";
+                    } else {
                         echo "<p>Vous n'avez pas de compte? <a href='inscriptionClients.php'>Inscrivez-vous</a></p>";
 
                     }
@@ -66,12 +70,7 @@
         $password = ""; // Remplacez par votre mot de passe MySQL
         $dbname = "shinecraft"; // Remplacez par le nom de votre base de données
 
-        $conn = new mysqli($servername, $username, $password, $dbname);
-
-        // Vérifier la connexion
-        if ($conn->connect_error) {
-            die("Connexion échouée: " . $conn->connect_error);
-        }
+        include("connexionDB.php");
 
         // S'assurer que l'encodage est correct
         $conn->set_charset("utf8mb4");
@@ -102,6 +101,9 @@
                         $idProduit = intval($_GET['idProduit']);
                         $quantite = intval($_GET['quantite']);
                         header("Location: ajouterPanier.php?idProduit=".$idProduit."&quantite=".$quantite."");
+                        exit();
+                    } else if (isset($_GET['src']) ) {
+                        header("Location: panier.php");
                         exit();
                     } else {
                         // Rediriger l'utilisateur vers la page protégée

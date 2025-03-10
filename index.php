@@ -5,6 +5,8 @@
     <!-- Favicon à ajouter après -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ShineCraft</title>
+    <link rel="shortcut icon" href="assets/images/logo.png" type="image/x-icon">
+    <link rel="apple-touch-icon" href="assets/images/logo.png">
     <meta name="description" content="ShineCraft célèbre chaque moment précieux de votre vie avec des bijoux élégants et exquis, conçu pour illuminer vos instants les plus mémorables.">
     <link rel="stylesheet" href="assets/css/styleGenerale.css">
     <link rel="stylesheet" href="assets/css/heros.css">
@@ -14,11 +16,7 @@
     <?php 
         include("header.php");
         //connexion à la base de données
-        $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-
-        if ($conn->connect_error){
-            die("Erreur de connexion : ". $conn->connect_error);
-        }
+        include("connexionDB.php");
     ?>
 
     <main>
@@ -47,6 +45,7 @@
                         while ($row1 = $results1->fetch_assoc()){
                                 $photosrec = unserialize($row1['photos']);
                                 echo"
+                                <a href='detailsProduits.php?idProduit=".$row1['id']."'>
                                     <div class='box'>
                                         <div class='image' style='background-image: url(dashboard/".$photosrec[0].");'>
                                             <div><em>".$row1['prix']."</em><span> FCFA</span></div>
@@ -70,6 +69,7 @@
                                             </svg>
                                         </p>
                                     </div>
+                                </a>
                                 ";
                             
                         }

@@ -1,11 +1,7 @@
     <?php
 
                     //connexion à la base de données
-                    $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-
-                    if ($conn->connect_error){
-                        die("Erreur de connexion : ". $conn->connect_error);
-                    }
+                    include("../connexionDB.php");
                     if (isset($_GET['idProduit'])) {
                         $idProduit = intval($_GET['idProduit']);
                         $sql1 = "DELETE FROM produits WHERE id = $idProduit";

@@ -38,7 +38,7 @@
                 </div>
             </div>
             <div class="credit">
-                <p>&copy; Copyright 2024 <strong>ShineCraft</strong>  || Tous droits réservés</p>
+                <p>&copy; Copyright <em id="years"></em> <strong>ShineCraft</strong>  || Tous droits réservés</p>
                 <ul>
                     <li style="color: brown;">
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-sourceforge" viewBox="0 0 16 16">
@@ -59,3 +59,7 @@
                 </ul>
             </div>
         </footer>
+        <script>
+            const years = document.getElementById('years');
+            years.innerHTML = new Date().getFullYear();
+        </script>

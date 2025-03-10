@@ -25,11 +25,7 @@
             include("nav.php");
 
             //connexion à la base de données
-            $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-
-            if ($conn->connect_error){
-                die("Erreur de connexion : ". $conn->connect_error);
-            }
+            include("../connexionDB.php");
         ?>
 
         <!-- La section details produits -->
@@ -47,7 +43,7 @@
                                         <div class='img'>
                                             <img src='".$photosrec[0]."' alt=".$row1['nomProduit'].">
                                             <div class='rowImg'>
-                                                <img src='' alt=''>
+                                                <img src='".$photosrec[0]."' alt=".$row1['nomProduit'].">
                                             </div>
                                         </div>
                                         <div class='infos'>
@@ -69,8 +65,8 @@
                                                     <path d='M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z'/>
                                                 </svg>
                                             </p>
-                                            <div class='btnQuantite'>
-                                                <span class='quantiteValue' id='quantiteValue'>".$row1['quantite']."</span>
+                                            <div class='btnQuantite' style='margin-bottom:10px;'>
+                                                <span class='quantiteValue' id='quantiteValue'>Quantité : ".$row1['quantite']."</span>
                                             </div>
                                             <p class='prix'>".$row1['prix']."<span>FCFA</span></p>
 
@@ -79,14 +75,14 @@
                                             </ul>
                                             <p class='contenu'>Description et caractéristiques du produit</p>
 
-                                            <a href='modifierProduits.php?idProduit=".$idProduit."'><button>Modifier</button></a>
+                                            <a href='modifierProduits.php?idProduit=".$idProduit."'><button class='btnProduitDetail'>Modifier</button></a>
                                             <button id='supprimer'>Supprimer</button>
 
                                             <div id='modal'>
                                                 <p class='titre'>Voullez vous vraiment supprimer : </p>
                                                 <p>".$row1['nomProduit']."</p>
                                                 <span>
-                                                    <button class='btn non'>Non</button>
+                                                    <button id='btnNOm' class='btn non'>Non</button>
                                                     <a href='supprimerProduit.php?idProduit=".$idProduit."'><button class='btn oui'>Oui</button></a>
                                                 </span>
                                             </div>
@@ -107,9 +103,15 @@
         const modal = document.getElementById("modal")
         const supprimer = document.getElementById("supprimer")
         const body = document.querySelector("body")
+        const btnNOm = document.getElementById("btnNOm")
 
         supprimer.addEventListener("click", () =>{
             modal.style.top='30%'
+            modal.style.transition='all 0.7s'
+        })
+
+        btnNOm.addEventListener('click', ()=>{
+            modal.style.top='-300%'
             modal.style.transition='all 0.7s'
         })
     </script>

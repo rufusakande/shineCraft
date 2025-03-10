@@ -55,12 +55,8 @@
         $passwordDB = ""; // Remplacez par votre mot de passe MySQL
         $dbname = "shinecraft"; // Remplacez par le nom de votre base de données
 
-        $conn = new mysqli($servername, $usernameDB, $passwordDB, $dbname);
-
-        // Vérifier la connexion
-        if ($conn->connect_error) {
-            die("Connexion échouée: " . $conn->connect_error);
-        }
+        //connexion à la base de données
+        include("../connexionDB.php");
 
         // S'assurer que l'encodage est correct
         $conn->set_charset("utf8mb4");

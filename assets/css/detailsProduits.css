@@ -35,9 +35,11 @@
     object-position: center;
     max-width: 550px;
     max-height: 350px;
+    height: 300px;
+    border-radius: 5px;
 }
 
-.details .boxLeft .img .rowImg{
+.details .boxLeft .rowImg{
     width: 100%;
     display: flex;
     align-items: center;
@@ -46,10 +48,18 @@
     padding: 5px;
 }
 
-.details .boxLeft .img .rowImg img{
+.details .boxLeft .rowImg img{
     width: 80px;
-    height: 70px;
-    object-fit: contain;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 4px;
+    transform: rotateY(1deg);
+    transition: ease-in-out .9s;
+}
+.details .boxLeft .rowImg img:hover{
+    transform: rotateY(25deg);
+    border-right: 4px solid rgba(255, 255, 255, 0.603);
+    transition: all 2s;
 }
 
 .details .boxLeft .infos{
@@ -60,7 +70,7 @@
 
 .details .boxLeft .infos h3{
     font-weight: 700;
-    color: blue;
+    color: var(--secondaryColor);
     font-size: 22px;
     margin-bottom: 15px;
 }
@@ -72,6 +82,11 @@
 
 .details .boxLeft .infos .btnQuantite{
     padding: 5px 0px;
+    background-color: rgb(141, 138, 118);
+    width: fit-content;
+    padding:5px 7px;
+    border-radius: 6px;
+    color: white;
 }
 
 .details .boxLeft .infos .btnQuantite button{
@@ -85,11 +100,13 @@
 .details .boxLeft .infos .btnQuantite .moins{
     background-color: red;
     border: 1px solid red;
+    border-radius: 50%;
 }
 
 .details .boxLeft .infos .btnQuantite .plus{
     background-color: green;
     border: 1px solid green;
+    border-radius: 50%;
 }
 
 .details .boxLeft .infos .btnQuantite span{
@@ -101,7 +118,7 @@
 .details .boxLeft .infos .prix{
     font-weight: 700;
     font-size: 19px;
-    color: blue;
+    color: var(--secondaryColor);
 }
 
 .details form button{
@@ -110,6 +127,12 @@
     background-color: var(--primaryColor);
     border-radius: 5px;
     margin: 10px 0px;
+    transition: all cubic-bezier(0.55, 0.055, 0.675, 0.19);
+}
+
+.details form button:hover{
+    background-color: rgb(255, 247, 203);
+    transition: all .2s;
 }
 
 .details .boxLeft .infos ul{
@@ -134,8 +157,31 @@
     border: 1px solid var(--primaryColor);
     background-color: var(--primaryColor);
     color: black;
-    box-shadow: 0px 0px 3px 3px goldenrod;
+    box-shadow: 1px 1px 3px 1px rgb(255, 222, 139);
     text-align: center;
+    transition: all .6s;
+}
+
+.details .boxLeft .infos #supprimer{
+    padding: 10px 15px;
+    margin: 20px 0px;
+    border-radius: 5px;
+    border: 1px solid brown;
+    background-color: brown;
+    color: white;
+    box-shadow: 1px 1px 3px 1px rgb(226, 89, 89);
+    text-align: center;
+    transition: all .6s;
+    margin-left: 6px;
+}
+
+.details .boxLeft .infos a button:hover{
+    background-color: rgb(238, 229, 181);
+    transition: all .6s;
+}
+
+.details .boxLeft .infos .btnProduitDetail{
+    
 }
 
 /**
@@ -211,14 +257,26 @@
 .topVendus .row{
     width: 100%;
     padding: 30px 0px 10px;
-    display: grid;
+    display: flex;
     gap: 15px;
-    grid-row-start: auto;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    justify-content: start;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    padding-left: 15px;
+}
+
+.topVendus .row::-webkit-scrollbar {
+    display: none; /* Chrome, Safari et Opera */
 }
 
 .topVendus .row .produit{
-    box-shadow: 0px 0px 8px 3px rgb(243, 243, 243);
+    text-align: center;
+    box-shadow: 2px 2px 4px 2px rgb(216, 216, 216);
+    min-width: 180px;
+    width: 230px;
+    border-radius: 4px;
 }
 
 .topVendus .row .produit img{
@@ -226,27 +284,34 @@
     object-position: center;
     width: 100%;
     height: 140px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .topVendus .row .produit .infos{
     padding: 5px;
-    font-size: 12px;
+    font-size: 14px;
 }
 
 .topVendus .row .produit .infos h3{
     font-weight: 700;
+    line-height: 34px;
     color: var(--secondaryColor);
 }
 
 .topVendus .row .produit .infos svg{
     color: var(--primaryColor);
+    width: 13px;
+    height: 13px;
+    margin: 5px 0px;
 }
 
 .topVendus .row .produit .infos .prix{
     font-weight: 700;
     font-size: 16px;
+    margin-bottom: 3px;
+    line-height: 28px;
+    color: var(--secondaryColor);
 }
-
 @media screen and (max-width:350px) {
     .details .boxLeft{
         width: 100%;

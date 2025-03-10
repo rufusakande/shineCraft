@@ -21,7 +21,9 @@
 
     <main>
         <?php 
-            include("nav.php")
+            include("nav.php");
+            //connexion à la base de données
+            include("../connexionDB.php");
         ?>
 
         <section>
@@ -33,9 +35,35 @@
                         <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0z"/>
                     </svg>
                     <div class="texte">
-                        <p>commande en cours</p>
-                        <h2>15</h2>
-                        <p>Aujourd'hui  <span>+12%</span></p>
+
+                    <?php 
+
+                            // 1️⃣ Récupérer le nombre total de commande
+                            $sqlTotal = "SELECT COUNT(*) AS total_commande FROM commande WHERE status='Payé'";
+                            $resultTotal = $conn->query($sqlTotal);
+                            $rowTotal = $resultTotal->fetch_assoc();
+                            $totalCommande = $rowTotal['total_commande'];
+
+                            // 2️⃣ Récupérer le nombre de commande ajoutés cette semaine
+                            $sqlNouveaux = "SELECT COUNT(*) AS nouvelle_commande 
+                                            FROM commande 
+                                            WHERE WEEK(date_commande) = WEEK(NOW()) 
+                                            AND YEAR(date_commande) = YEAR(NOW())
+                                            AND status='Payé'";
+                            $resultNouveaux = $conn->query($sqlNouveaux);
+                            $rowNouveaux = $resultNouveaux->fetch_assoc();
+                            $nouveauxCommande = $rowNouveaux['nouvelle_commande'];
+
+                            // 3️⃣ Calcul du pourcentage de nouveaux clients
+                            $pourcentage = ($totalCommande > 0) ? round(($nouveauxCommande / $totalCommande) * 100, 2) : 0;
+
+                            // 4️⃣ Affichage des résultats
+                            echo "
+                                <p>Commande en cours</p>
+                                <h2>". $totalCommande ."</h2>
+                                <p>Aujourd'hui  <span>+". number_format($pourcentage, 2) ."%</span></p>
+                                ";
+                        ?>
                     </div>
                 </div>
                 <div class="box">
@@ -53,9 +81,35 @@
                         <path d="M15 14s1 0 1-1-1-4-5-4-5 3-5 4 1 1 1 1zm-7.978-1L7 12.996c.001-.264.167-1.03.76-1.72C8.312 10.629 9.282 10 11 10c1.717 0 2.687.63 3.24 1.276.593.69.758 1.457.76 1.72l-.008.002-.014.002zM11 7a2 2 0 1 0 0-4 2 2 0 0 0 0 4m3-2a3 3 0 1 1-6 0 3 3 0 0 1 6 0M6.936 9.28a6 6 0 0 0-1.23-.247A7 7 0 0 0 5 9c-4 0-5 3-5 4q0 1 1 1h4.216A2.24 2.24 0 0 1 5 13c0-1.01.377-2.042 1.09-2.904.243-.294.526-.569.846-.816M4.92 10A5.5 5.5 0 0 0 4 13H1c0-.26.164-1.03.76-1.724.545-.636 1.492-1.256 3.16-1.275ZM1.5 5.5a3 3 0 1 1 6 0 3 3 0 0 1-6 0m3-2a2 2 0 1 0 0 4 2 2 0 0 0 0-4"/>
                     </svg>
                     <div class="texte">
-                        <p>Nos clients</p>
-                        <h2>61</h2>
-                        <p>Nouveaux  <span>+09%</span></p>
+                        <?php 
+                            // Connexion à la base de données (assurez-vous que $conn est bien initialisé)
+
+                            // 1️⃣ Récupérer le nombre total de clients
+                            $sqlTotal = "SELECT COUNT(*) AS total_clients FROM clients";
+                            $resultTotal = $conn->query($sqlTotal);
+                            $rowTotal = $resultTotal->fetch_assoc();
+                            $totalClients = $rowTotal['total_clients'];
+
+                            // 2️⃣ Récupérer le nombre de clients ajoutés cette semaine
+                            $sqlNouveaux = "SELECT COUNT(*) AS nouveaux_clients 
+                                            FROM clients 
+                                            WHERE WEEK(date_creation) = WEEK(NOW()) 
+                                            AND YEAR(date_creation) = YEAR(NOW())";
+                            $resultNouveaux = $conn->query($sqlNouveaux);
+                            $rowNouveaux = $resultNouveaux->fetch_assoc();
+                            $nouveauxClients = $rowNouveaux['nouveaux_clients'];
+
+                            // 3️⃣ Calcul du pourcentage de nouveaux clients
+                            $pourcentage = ($totalClients > 0) ? ($nouveauxClients / $totalClients) * 100 : 0;
+
+                            // 4️⃣ Affichage des résultats
+                            echo "
+                                <p>Nos clients</p>
+                                <h2>". $totalClients ."</h2>
+                                <p>Nouveaux  <span>+". number_format($pourcentage, 2) ."%</span></p>
+                                ";
+                        ?>
+                        
                     </div>
                 </div>
                 <div class="box">
@@ -64,9 +118,31 @@
                         <path d="M2.354.646a.5.5 0 0 0-.801.13l-.5 1A.5.5 0 0 0 1 2v13H.5a.5.5 0 0 0 0 1h15a.5.5 0 0 0 0-1H15V2a.5.5 0 0 0-.053-.224l-.5-1a.5.5 0 0 0-.8-.13L13 1.293l-.646-.647a.5.5 0 0 0-.708 0L11 1.293l-.646-.647a.5.5 0 0 0-.708 0L9 1.293 8.354.646a.5.5 0 0 0-.708 0L7 1.293 6.354.646a.5.5 0 0 0-.708 0L5 1.293 4.354.646a.5.5 0 0 0-.708 0L3 1.293zm-.217 1.198.51.51a.5.5 0 0 0 .707 0L4 1.707l.646.647a.5.5 0 0 0 .708 0L6 1.707l.646.647a.5.5 0 0 0 .708 0L8 1.707l.646.647a.5.5 0 0 0 .708 0L10 1.707l.646.647a.5.5 0 0 0 .708 0L12 1.707l.646.647a.5.5 0 0 0 .708 0l.509-.51.137.274V15H2V2.118z"/>
                     </svg>
                     <div class="texte">
-                        <p>Ventes totale</p>
-                        <h2>34</h2>
-                        <p>Aujourd'hui  <span>+17%</span></p>
+                    <?php 
+                        // 1️⃣ Récupérer le nombre total de produits vendus
+                        $sqlTotal = "SELECT SUM(qte_vendus) AS totalVente FROM produits";
+                        $resultTotal = $conn->query($sqlTotal);
+                        $rowTotal = $resultTotal->fetch_assoc();
+                        $totalVente = $rowTotal['totalVente'] ?? 0; // Si NULL, on met 0
+
+                        // 2️⃣ Récupérer le nombre de produits vendus aujourd'hui
+                        $sqlAujourdHui = "SELECT SUM(qte_vendus) AS nouvelleVente 
+                                        FROM produits 
+                                        WHERE DATE(date_vendus) = CURDATE()";
+                        $resultAujourdHui = $conn->query($sqlAujourdHui);
+                        $rowAujourdHui = $resultAujourdHui->fetch_assoc();
+                        $nouvelleVente = $rowAujourdHui['nouvelleVente'] ?? 0;
+
+                        // 3️⃣ Calcul du pourcentage de ventes d'aujourd'hui
+                        $pourcentage = ($totalVente > 0) ? round(($nouvelleVente / $totalVente) * 100, 2) : 0;
+
+                        // 4️⃣ Affichage des résultats
+                        echo "
+                            <p>Ventes totales</p>
+                            <h2>". number_format($totalVente, 0, '.', ' ') ."</h2>
+                            <p>Aujourd'hui  <span>+". number_format($pourcentage, 2) ."%</span></p>
+                        ";
+                        ?>
                     </div>
                 </div>
             </div>
@@ -76,11 +152,11 @@
                     <div class="boxHeading">
                         <h3>Top ventes</h3>
                         <div class="filtre filtreMobile">
-                            <select name="filtre" id="filtre">
+                            <select name="filtre" id="filtre-ventes">
                                 <option value="all">Tout</option>
-                                <option value="colliers">Aujourd'hui</option>
-                                <option value="bracelets">Semaine</option>
-                                <option value="bagues">Mois</option>
+                                <option value="todays">Aujourd'hui</option>
+                                <option value="week">Semaine</option>
+                                <option value="month">Mois</option>
                             </select>
                         </div>
                     </div>
@@ -96,61 +172,43 @@
                                     <td>Total</td>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/produits1.webp" alt="">
-                                    </td>
-                                    <td>Perle de minuit</td>
-                                    <td>5</td>
-                                    <td>180000FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/produits2.webp" alt="">
-                                    </td>
-                                    <td>Mystique de lune</td>
-                                    <td>9</td>
-                                    <td>800000FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/produits3.webp" alt="">
-                                    </td>
-                                    <td>Soleil d'or</td>
-                                    <td>3</td>
-                                    <td>300000FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/produits4.webp" alt="">
-                                    </td>
-                                    <td>Collier des E</td>
-                                    <td>7</td>
-                                    <td>560000FCFA</td>
-                                </tr>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/produits5.webp" alt="">
-                                    </td>
-                                    <td>Papillon</td>
-                                    <td>5</td>
-                                    <td>300000FCFA</td>
-                                </tr>
+                            <tbody id="ventesTable">
+                                <?php
+                                    $sql = "SELECT * FROM produits ORDER BY qte_vendus DESC LIMIT 4";
+                                    $results = $conn->query($sql);
+                                    if($results->num_rows > 0) {
+                                        while($row = $results->fetch_assoc()) {
+                                            $photorec = unserialize($row['photos']);
+                                                echo"
+                                                    <tr>
+                                                        <td class='img'>
+                                                            <img src=".$photorec[0]." alt=''>
+                                                        </td>
+                                                        <td>".$row['nomProduit']."</td>
+                                                        <td>".$row['qte_vendus']."</td>
+                                                        <td>".$row['prix']."</td>
+                                                    </tr>
+                                                ";
+                                        }
+                                    }else {
+                                        echo "<tr><td>Aucun produit disponible</td></tr>";
+                                    }
+                                ?>
                             </tbody>
                         </table>
                     </div>
                 </div>
                 <div class="box">
+
                     <div class="boxHeading">
                         <h3>Clients</h3>
                         <div class="filtre filtreMobile">
-                            <select name="filtre">
-                                <option value="all">Tout</option>
-                                <option value="colliers">Aujourd'hui</option>
-                                <option value="bracelets">Semaine</option>
-                                <option value="bagues">Mois</option>
-                            </select>
+                        <select name="filtre" id="filtre-client">
+                            <option value="all">Tout</option>
+                            <option value="todays">Aujourd'hui</option>
+                            <option value="week">Semaine</option>
+                            <option value="month">Mois</option>
+                        </select>
                         </div>
                     </div>
                     <div class="infos">
@@ -159,35 +217,31 @@
                                 <tr>
                                     <td>**</td>
                                     <td>Nom</td>
-                                    <td>Pays</td>
-                                    <td>Session</td>
+                                    <td>Prénom</td>
+                                    <td>Email</td>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/bg5.webp" alt="">
-                                    </td>
-                                    <td>Alban Jaurès</td>
-                                    <td>Mali</td>
-                                    <td>9%</td>
-                                </tr>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/bg5.webp" alt="">
-                                    </td>
-                                    <td>Jean01</td>
-                                    <td>Bénin</td>
-                                    <td>12%</td>
-                                </tr>
-                                <tr>
-                                    <td class="img">
-                                        <img src="../assets/images/bg5.webp" alt="">
-                                    </td>
-                                    <td>AnneP8</td>
-                                    <td>Bénin</td>
-                                    <td>7%</td>
-                                </tr>
+                            <tbody id="clientTable">
+                                <?php 
+                                    $sql = "SELECT * FROM clients";
+                                    $results = $conn->query($sql);
+                                    if ($results->num_rows > 0) {
+                                        while ($row = $results->fetch_assoc()) {
+                                            echo "
+                                                <tr>
+                                                    <td class='img'>
+                                                        <img src='../assets/images/apropos.webp' alt='photo du client'>
+                                                    </td>
+                                                    <td>".$row['nom']."</td>
+                                                    <td>".$row['prenom']."</td>
+                                                    <td>".$row['email']."</td>
+                                                </tr>
+                                            ";
+                                        }
+                                    } else {
+                                        echo "<tr><td colspan='4'>Aucun client trouvé</td></tr>";
+                                    }
+                                ?>
                             </tbody>
                         </table>
                     </div>
@@ -197,5 +251,36 @@
     </main>
 
     <script src="../assets/js/menuDashboard.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const filtre = document.getElementById("filtre-client");
+            const filtreVentes = document.getElementById("filtre-ventes");
+            const tbody = document.querySelector("#clientTable");
+            const tbodyVentes = document.querySelector("#ventesTable");
+
+            filtre.addEventListener("change", function () {
+                const valeurFiltre = this.value;
+
+                fetch(`filtrer_clients.php?filtre=${valeurFiltre}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        tbody.innerHTML = data; // Injecte uniquement les lignes <tr>
+                    })
+                    .catch(error => console.error("Erreur:", error));
+            });
+
+            filtreVentes.addEventListener("change", function () {
+                const valeurFiltre = this.value;
+
+                fetch(`filtrer_ventes.php?filtre=${valeurFiltre}`)
+                    .then(response => response.text())
+                    .then(data => {
+                        tbodyVentes.innerHTML = data; // Injecte uniquement les lignes <tr>
+                    })
+                    .catch(error => console.error("Erreur:", error));
+            });
+        });
+
+    </script>
 </body>
 </html>

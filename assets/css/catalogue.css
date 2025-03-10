@@ -348,6 +348,7 @@
 .topVendus .heading ul li{
     font-size: 18px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .topVendus .heading ul .active{
@@ -358,15 +359,26 @@
 .topVendus .row{
     width: 100%;
     padding: 30px 0px 10px;
-    display: grid;
+    display: flex;
     gap: 15px;
-    grid-row-start: auto;
-    grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+    justify-content: start;
+    align-items: center;
+    overflow-x: auto;
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+    padding-left: 15px;
+}
+
+.topVendus .row::-webkit-scrollbar {
+    display: none; /* Chrome, Safari et Opera */
 }
 
 .topVendus .row .produit{
     text-align: center;
-    box-shadow: 0px 0px 8px 3px rgb(243, 243, 243);
+    box-shadow: 2px 2px 4px 2px rgb(216, 216, 216);
+    min-width: 180px;
+    width: 230px;
+    border-radius: 4px;
 }
 
 .topVendus .row .produit img{
@@ -374,6 +386,7 @@
     object-position: center;
     width: 100%;
     height: 140px;
+    border-radius: 4px 4px 0px 0px;
 }
 
 .topVendus .row .produit .infos{
@@ -383,21 +396,23 @@
 
 .topVendus .row .produit .infos h3{
     font-weight: 700;
+    line-height: 34px;
     color: var(--secondaryColor);
 }
 
 .topVendus .row .produit .infos svg{
     color: var(--primaryColor);
-    width: 10px;
-    height: 10px;
-    margin: 10px 0px;
+    width: 13px;
+    height: 13px;
+    margin: 5px 0px;
 }
 
 .topVendus .row .produit .infos .prix{
     font-weight: 700;
     font-size: 16px;
-    margin-bottom: 10px;
-    color: blue;
+    margin-bottom: 3px;
+    line-height: 28px;
+    color: var(--secondaryColor);
 }
 
 /**
@@ -422,6 +437,25 @@
     border-bottom: 3px solid var(--primaryColor);
 }
 
+.nouveautes .heading a{
+    color: black;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.nouveautes .heading a button{
+    padding: 5px 7px; 
+    border: 1px solid gold;
+    border-radius: 3px;
+    background-color: gold;
+    display: flex;
+    align-items: center;
+}
+
+.nouveautes .heading a button svg{
+    margin-left: 5px;
+}
+
 .nouveautes .row{
     padding: 20px 0px;
     display: grid;
@@ -434,7 +468,7 @@
     padding: 15px;
     display: grid;
     grid-gap: 0px;
-    max-width: 600px;
+    max-width: 550px;
     justify-content: center;
     grid-template-columns: repeat(2, 1fr);
     box-shadow: 0px 0px 3px 3px rgb(238, 238, 238);
@@ -459,7 +493,7 @@
 
 .nouveautes .row .boxLeft .infos h3{
     font-weight: 700;
-    color: blue;
+    color: var(--secondaryColor);
     margin-bottom: 15px;
 }
 
@@ -471,7 +505,7 @@
 .nouveautes .row .boxLeft .infos .prix{
     font-weight: 700;
     font-size: 16px;
-    color: brown;
+    color: rgb(63, 0, 0);
 }
 
 .nouveautes .row .boxLeft .infos ul{
@@ -495,15 +529,23 @@
     border: 1px solid var(--primaryColor);
     background-color: var(--primaryColor);
     color: black;
-    box-shadow: 0px 0px 3px 3px goldenrod;
+    box-shadow: 0px 0px 3px 3px rgb(212, 184, 22);
     text-align: center;
+    transition: ease-in-out .5s;
+}
+
+.nouveautes .row .boxLeft .infos a button:hover{
+    background-color: rgb(255, 244, 183);
+    box-shadow: 0px 0px 3px 2px rgb(255, 228, 160);
+    border: 1px solid rgb(255, 228, 74);
+    transition: ease-in-out .5s;
 }
 
 .nouveautes .row .boxRight{
     display: grid;
     gap: 15px;
     justify-content: center;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, 320px);
 }
 
 .nouveautes .row .boxRight .box{
@@ -517,7 +559,8 @@
 .nouveautes .row .boxRight .box img{
     object-fit: cover;
     object-position: center;
-    max-width:140px;
+    width: 180px;
+    height: 120px;
 }
 
 .nouveautes .row .boxRight .box .infos{
@@ -528,7 +571,7 @@
 
 .nouveautes .row .boxRight .box .infos h3{
     font-weight: 700;
-    color: blue;
+    color: var(--secondaryColor);
     margin-bottom: 5px;
 }
 
@@ -540,7 +583,7 @@
 .nouveautes .row .boxRight .infos .prix{
     font-weight: 700;
     font-size: 14px;
-    color: brown;
+    color: rgb(63, 0, 0);
 }
 
 @media screen and (max-width:1305px) {

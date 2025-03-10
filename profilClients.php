@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="assets/css/responsive.css">
 </head>
 <body>
-    <?php 
+    <?php
     session_start();
     if (!isset($_SESSION['user_id'])) {
         header("Location: authentificationClients.php"); // Rediriger vers la page de connexion si non connecté

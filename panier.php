@@ -12,12 +12,11 @@
 <body>
     <?php 
         session_start();
-        $conn = new mysqli('localhost', 'root', '', 'shinecraft');
-        
-        // Vérifier la connexion à la base de données
-        if($conn->connect_error) {
-            die("Erreur de connexion : " . $conn->connect_error);
+        if (!isset($_SESSION['user_id'])) {
+            header("Location: authentificationClients.php?src=pn"); // Rediriger vers la page de connexion si non connecté
+            exit();
         }
+        include("connexionDB.php");
             
         include("header.php");
     ?>
@@ -53,19 +52,31 @@
                                         <td>{$row['nomProduit']}</td>
                                         <td>{$row['quantite']}</td>
                                         <td>$total</td>
-                                        <td><a href='deletePanierProduit.php?idProduit=".$row['id']."' class='delete'>X</a></td>
-                                    </tr>";
+                                        <td class='delete' id=".$row['id'].">
+                                            <svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' fill='currentColor' class='bi bi-x-circle-fill' viewBox='0 0 16 16'>
+                                                <path d='M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z'/>
+                                            </svg>
+                                        </td>
+                                    </tr>
+                                    ";
+                                    
                             }
                             echo "</table>
                             <div class='total'>
                                     <p> Total hors taxe <br> TVA  <br> Total à payer </p>
                                     <p>:<span> ".$apayer." FCFA</span> <br> :<span> ".$tva * $apayer." FCFA</span> <br> :<span> ".$apayer + $tva * $apayer." FCFA</span> </p>
                             </div>
-                            
-                            <div class='btnCommande'>
-                                <a href=''><button>Passez votre commande</button></a>
+                            <div class='btnCommande kkiapay-button'>
+                                <a href='commande.php'><button>Passez votre commande</button></a>
                             </div>
-                            ";
+                            
+                                        <div class='modalDelete'>
+                                            <h3>Voulez vous retirer cet produit du panier?</h3>
+                                            <div class='btn'>
+                                                <button class='non'>Non</button>
+                                                <button class='oui'>Oui</button>
+                                            </div>
+                                        </div>";
                             
                         } else {
                             echo "Votre panier est vide.";
@@ -90,5 +101,36 @@
     </main>
 
     <script src="assets/js/main.js"></script>
+    <script>
+        /**
+        *Ce code permet d'afficher le modal de supression lorsqu'on clique sur supprimer un produit du pannier. 
+        @deleteProduit nous permet de savoir sur quel produits l'utilisateur a cliqué et on récupère l'id de se produit 
+        *et on en fait un url dynamique pour retirer le produit du panier lorsque l'utilisateur clique sur oui dans le modal 
+        */
+        const deleteProduit = document.querySelectorAll('.delete')
+        const modalDelete = document.querySelector('.modalDelete')
+        const non = document.querySelector('.non')
+        const oui = document.querySelector('.oui')
+
+        function redirection (id) {
+            oui.addEventListener('click', () =>{
+                window.location.href = "deletePanierProduit.php?idProduit=" + id
+                modalDelete.style.display = 'none'
+            })
+        }
+
+        deleteProduit.forEach(produit =>{
+            produit.addEventListener('click', () =>{
+                modalDelete.style.display = 'block'
+                produit.getAttribute("id")
+                redirection(produit.getAttribute("id"))
+
+            })
+        })
+
+        non.addEventListener('click', () =>{
+                modalDelete.style.display = 'none'
+            })
+    </script>
 </body>
 </html>

@@ -39,7 +39,7 @@ section .row .box1{
     width: 400px;
     background-image: url(../images/bg4.webp);
     border-radius: 10px 0px 0px 10px;
-    height: 540px;
+    height: 498px;
 }
 
 
@@ -76,15 +76,20 @@ section .row .box2{
     flex-direction: column;
     gap: 16px;
     background-color: white;
-    color: black;
+    color: var(--secondaryColor);
     width: 400px;
     max-height: 700px;
     padding: 80px 0px;
+    border-radius: 0px 10px 10px 0px;
 }
 
 section .row .box2 h2{
     font-size: 22px;
     font-weight: 600;
+}
+
+section .row .box2 h2.titreAvecProduit{
+    margin-top: 53px;
 }
 
 section .row .box2 form{
@@ -117,6 +122,13 @@ section .row .box2 form .label{
     display: block;
 }
 
+section .row .box2 form .passWordOublier{
+    color: blue;
+    line-height: 1px;
+    font-size: 14px;
+    text-decoration: none;
+}
+
 section .row .box2 form input{
     padding: 10px;
     color: black;
@@ -143,13 +155,21 @@ section .row .box2 form input[type="submit"]{
         flex-direction: column;
         gap: 20px;
     }
+
     section h1{
         display: block;
     }
 
-    
     section .row .box1{
         display: none;
+    }
+
+    section .row .box2{
+        border-radius: 10px;
+    }
+
+    section .row .box2 h2.titreAvecProduit{
+        margin: 0px;
     }
 
 }
