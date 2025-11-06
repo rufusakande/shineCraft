@@ -1,0 +1,41 @@
+import { DataTypes } from 'sequelize';
+import { sequelize } from '../config/db';
+import { UserInstance } from './types';
+
+const User = sequelize.define<UserInstance>(
+  'User',
+  {
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        isEmail: true,
+      },
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.ENUM('admin', 'customer'),
+      allowNull: false,
+      defaultValue: 'customer',
+    },
+  },
+  {
+    timestamps: true,
+    tableName: 'users',
+  }
+);
+
+export default User;
