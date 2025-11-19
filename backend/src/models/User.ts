@@ -14,6 +14,14 @@ const User = sequelize.define<UserInstance>(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    firstName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    lastName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -22,12 +30,20 @@ const User = sequelize.define<UserInstance>(
         isEmail: true,
       },
     },
+    phone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    avatar: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
     },
     role: {
-      type: DataTypes.ENUM('admin', 'customer'),
+      type: DataTypes.ENUM('admin', 'super_admin', 'customer'),
       allowNull: false,
       defaultValue: 'customer',
     },

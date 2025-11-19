@@ -172,6 +172,27 @@ class ProductController {
       return res.status(500).json(formatError('Failed to fetch products'));
     }
   }
+
+  async getById(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+
+      const product = await Product.findByPk(id, {
+        include: [{ model: Category, as: 'category' }]
+      });
+
+      if (!product) {
+        throw new ApiError(404, 'Product not found');
+      }
+
+      return res.json(formatResponse(product));
+    } catch (error) {
+      if (error instanceof ApiError) {
+        return res.status(error.statusCode).json(formatError(error.message));
+      }
+      return res.status(500).json(formatError('Failed to fetch product'));
+    }
+  }
 }
 
 export default new ProductController();

@@ -1,36 +1,54 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import ProductCard from "@/components/ProductCard";
 import { Button } from "@/components/ui/button";
-import productRing from "@/assets/product-ring.jpg";
-import productNecklace from "@/assets/product-necklace.jpg";
-import productBracelet from "@/assets/product-bracelet.jpg";
-import productEarrings from "@/assets/product-earrings.jpg";
+import { productService } from "@/lib/api";
+import type { Product } from "@/lib/api";
 
 const Shop = () => {
   const [selectedCategory, setSelectedCategory] = useState("Tout");
+  const [allProducts, setAllProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const categories = ["Tout", "Bagues", "Colliers", "Bracelets", "Boucles d'oreilles"];
+  const categories = ["Tout"];
 
-  const products = [
-    { id: "1", name: "Bague Florale Or", price: 289.00, image: productRing, category: "Bagues" },
-    { id: "2", name: "Collier Pendentif Rose", price: 349.00, image: productNecklace, category: "Colliers" },
-    { id: "3", name: "Bracelet Artisanal", price: 199.00, image: productBracelet, category: "Bracelets" },
-    { id: "4", name: "Boucles d'Oreilles Élégantes", price: 159.00, image: productEarrings, category: "Boucles d'oreilles" },
-    { id: "5", name: "Bague Solitaire", price: 399.00, image: productRing, category: "Bagues" },
-    { id: "6", name: "Collier Perles", price: 279.00, image: productNecklace, category: "Colliers" },
-    { id: "7", name: "Bracelet Charm", price: 229.00, image: productBracelet, category: "Bracelets" },
-    { id: "8", name: "Créoles Or Rose", price: 189.00, image: productEarrings, category: "Boucles d'oreilles" },
-  ];
+  // Charger les produits depuis la base de données
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        setLoading(true);
+        const products = await productService.getProducts();
+        setAllProducts(Array.isArray(products) ? products : []);
+      } catch (err) {
+        console.error("Erreur lors du chargement des produits:", err);
+        setError("Impossible de charger les produits");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadProducts();
+  }, []);
+
+  // Construire la liste des catégories dynamiquement
+  const dynamicCategories = ["Tout"];
+  const uniqueCategories = new Set<string>();
+  allProducts.forEach(product => {
+    if (product.category?.name) {
+      uniqueCategories.add(product.category.name);
+    }
+  });
+  dynamicCategories.push(...Array.from(uniqueCategories).sort());
 
   const filteredProducts = selectedCategory === "Tout" 
-    ? products 
-    : products.filter(p => p.category === selectedCategory);
+    ? allProducts 
+    : allProducts.filter(p => p.category?.name === selectedCategory);
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar cartCount={0} />
+      <Navbar />
       
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -55,7 +73,7 @@ const Shop = () => {
             transition={{ delay: 0.2 }}
             className="flex flex-wrap justify-center gap-4 mb-16"
           >
-            {categories.map((category) => (
+            {dynamicCategories.map((category) => (
               <Button
                 key={category}
                 variant={selectedCategory === category ? "default" : "outline"}
@@ -74,16 +92,37 @@ const Shop = () => {
             transition={{ delay: 0.4 }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {filteredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 * index }}
-              >
-                <ProductCard {...product} />
-              </motion.div>
-            ))}
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">Chargement des produits...</p>
+              </div>
+            ) : error ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-red-500">{error}</p>
+              </div>
+            ) : filteredProducts.length > 0 ? (
+              filteredProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.1 * index }}
+                >
+                  <ProductCard 
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    images={product.images}
+                    category={product.category?.name}
+                    slug={product.slug}
+                  />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">Aucun produit dans cette catégorie</p>
+              </div>
+            )}
           </motion.div>
         </div>
       </div>

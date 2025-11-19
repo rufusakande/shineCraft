@@ -3,9 +3,13 @@ import { Model } from 'sequelize';
 export interface UserAttributes {
   id?: number;
   name: string;
+  firstName?: string;
+  lastName?: string;
   email: string;
+  phone?: string;
+  avatar?: string;
   password: string;
-  role: 'admin' | 'customer';
+  role: 'admin' | 'super_admin' | 'customer';
   createdAt?: Date;
   updatedAt?: Date;
 }
@@ -53,8 +57,18 @@ export interface OrderAttributes {
   userId: number;
   items: OrderItem[];
   total: number;
-  status: 'pending' | 'paid' | 'shipped' | 'cancelled';
-  address: OrderAddress;
+  amount: number;
+  status: 'pending' | 'paid' | 'shipped' | 'cancelled' | 'refunded';
+  address?: OrderAddress;
+  shippingAddress?: OrderAddress;
+  shippingMethod?: 'standard' | 'express';
+  reference?: string;
+  paymentMethod?: string;
+  transactionId?: string;
+  customerName?: string;
+  customerEmail?: string;
+  customerPhone?: string;
+  notes?: string;
   createdAt?: Date;
   updatedAt?: Date;
 }

@@ -1,0 +1,257 @@
+/* Mobile Responsive Admin Styles */
+
+/* Header Responsive */
+@media (max-width: 640px) {
+  header {
+    height: 56px;
+  }
+
+  header .flex {
+    padding: 0.5rem;
+  }
+
+  /* Sidebar adjustments for mobile */
+  aside {
+    width: 256px; /* 64 * 4 = w-64 */
+  }
+
+  /* Main content padding adjustments */
+  main {
+    padding-top: 3.5rem; /* Account for smaller header on mobile */
+  }
+}
+
+/* Tablet Responsive */
+@media (min-width: 641px) and (max-width: 1024px) {
+  aside {
+    width: 288px; /* w-72 */
+  }
+}
+
+/* Mobile-first responsive text */
+.responsive-heading {
+  font-size: clamp(1.25rem, 5vw, 2.25rem);
+  line-height: 1.2;
+}
+
+.responsive-text {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+}
+
+/* Mobile menu overlay */
+@media (max-width: 1024px) {
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 30;
+  }
+
+  aside {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 40;
+    max-height: 100vh;
+    overflow-y: auto;
+  }
+}
+
+/* Table responsive fixes */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.875rem;
+  }
+
+  table th,
+  table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* Hide non-essential columns on mobile */
+  .hide-on-mobile {
+    display: none !important;
+  }
+
+  /* Stack pagination buttons */
+  .pagination-container {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .pagination-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+/* Button responsive */
+.responsive-button {
+  padding: clamp(0.5rem, 1vw, 0.75rem) clamp(0.75rem, 2vw, 1rem);
+  font-size: clamp(0.75rem, 1vw, 1rem);
+}
+
+/* Input responsive */
+.responsive-input {
+  padding: clamp(0.5rem, 1vw, 0.75rem);
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  border-radius: clamp(0.375rem, 1vw, 0.5rem);
+}
+
+/* Icon responsive */
+.responsive-icon {
+  width: clamp(1rem, 5vw, 1.5rem);
+  height: clamp(1rem, 5vw, 1.5rem);
+}
+
+/* Grid responsive gap */
+.responsive-gap {
+  gap: clamp(0.5rem, 2vw, 1rem);
+}
+
+/* Touch targets for mobile */
+@media (max-width: 768px) {
+  button,
+  [role="button"],
+  a {
+    min-height: 2.5rem;
+    min-width: 2.5rem;
+  }
+
+  .no-touch-padding {
+    padding: 0.25rem;
+  }
+}
+
+/* Modal/Overlay responsive */
+@media (max-width: 768px) {
+  .modal-content {
+    max-height: 90vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .modal-width {
+    width: calc(100% - 2rem);
+    max-width: 100%;
+  }
+}
+
+/* Safe area support for notched devices */
+@supports (padding: max(0px)) {
+  body {
+    padding-left: max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+
+  header {
+    padding-left: max(0.5rem, env(safe-area-inset-left));
+    padding-right: max(0.5rem, env(safe-area-inset-right));
+  }
+
+  aside {
+    padding-left: max(0, env(safe-area-inset-left));
+  }
+}
+
+/* Scrollbar mobile */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+  }
+}
+
+/* Animations disabled on slower devices */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Orientation changes */
+@media (orientation: portrait) {
+  .hide-on-portrait {
+    display: none !important;
+  }
+}
+
+@media (orientation: landscape) {
+  .hide-on-landscape {
+    display: none !important;
+  }
+
+  aside {
+    max-height: 100vh;
+  }
+}
+
+/* Print styles */
+@media print {
+  header,
+  aside,
+  .no-print,
+  .pagination-container,
+  .filter-inputs {
+    display: none !important;
+  }
+
+  main {
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  table tr {
+    page-break-inside: avoid;
+  }
+}
+
+/* Accessibility improvements */
+@media (prefers-color-scheme: dark) {
+  /* Fallback for dark mode preference */
+  body {
+    color-scheme: dark light;
+  }
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Skip to content link for accessibility */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: #3b82f6;
+  color: white;
+  padding: 8px;
+  text-decoration: none;
+  z-index: 100;
+}
+
+.skip-link:focus {
+  top: 0;
+}

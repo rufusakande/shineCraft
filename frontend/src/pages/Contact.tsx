@@ -17,7 +17,7 @@ const Contact = () => {
 
   return (
     <div className="min-h-screen bg-background">
-      <Navbar cartCount={0} />
+      <Navbar />
       
       <div className="pt-32 pb-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

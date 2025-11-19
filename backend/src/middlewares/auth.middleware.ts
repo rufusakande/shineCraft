@@ -9,11 +9,12 @@ interface JwtPayload {
 }
 
 export interface AuthRequest extends Request {
+  userId?: number;
   user?: {
-    id: number;
-    email: string;
-    role: string;
-    name: string;
+    id?: number;
+    email?: string;
+    role?: string;
+    name?: string;
   };
 }
 
@@ -40,6 +41,7 @@ export const authMiddleware = async (
       return res.status(401).json({ message: 'User not found' });
     }
 
+    req.userId = user.id;
     req.user = user.toJSON();
     next();
   } catch (error) {
@@ -52,7 +54,7 @@ export const adminMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  if (req.user?.role !== 'admin') {
+  if (req.user?.role !== 'admin' && req.user?.role !== 'super_admin') {
     return res.status(403).json({ message: 'Admin access required' });
   }
   next();

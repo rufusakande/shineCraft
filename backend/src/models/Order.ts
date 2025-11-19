@@ -12,28 +12,82 @@ const Order = sequelize.define<OrderInstance>(
     },
     userId: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       references: {
         model: 'users',
         key: 'id',
       },
     },
+    reference: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
     items: {
       type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: null,
+    },
+    amount: {
+      type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
+      defaultValue: 0.00,
     },
     total: {
       type: DataTypes.DECIMAL(10, 2),
-      allowNull: false,
+      allowNull: true,
+      defaultValue: 0.00,
     },
     status: {
-      type: DataTypes.ENUM('pending', 'paid', 'shipped', 'cancelled'),
+      type: DataTypes.ENUM('pending', 'paid', 'shipped', 'cancelled', 'refunded'),
       allowNull: false,
       defaultValue: 'pending',
     },
+    paymentMethod: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'kkiapay',
+    },
+    transactionId: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+      unique: true,
+    },
+    shippingAddress: {
+      type: DataTypes.JSON,
+      allowNull: true,
+      defaultValue: null,
+    },
     address: {
       type: DataTypes.JSON,
-      allowNull: false,
+      allowNull: true,
+      defaultValue: null,
+    },
+    shippingMethod: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: 'standard',
+    },
+    customerName: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
+    customerEmail: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
+    customerPhone: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      defaultValue: null,
+    },
+    notes: {
+      type: DataTypes.TEXT,
+      allowNull: true,
+      defaultValue: null,
     },
   },
   {

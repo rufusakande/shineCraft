@@ -146,7 +146,8 @@ export const productService = {
     sort?: string;
   }) {
     const { data } = await api.get('/api/products', { params });
-    return data.data;
+    // La réponse a la structure: { success, data: { items: [...], meta: {...} } }
+    return data.data?.items || [];
   },
 
   async getProductBySlug(slug: string) {
@@ -155,6 +156,22 @@ export const productService = {
   },
 
   // Admin methods
+  async getAdminProducts(params?: {
+    page?: number;
+    limit?: number;
+    categoryId?: number;
+    search?: string;
+  }) {
+    const { data } = await api.get('/api/admin/products', { params });
+    // La réponse peut être paginée: { success, data: { items: [...], meta: {...} } }
+    return data.data?.items || data.data || [];
+  },
+
+  async getAdminProduct(id: number) {
+    const { data } = await api.get(`/api/admin/products/${id}`);
+    return data.data;
+  },
+
   async createProduct(formData: FormData) {
     const { data } = await api.post('/api/admin/products', formData, {
       headers: { 'Content-Type': 'multipart/form-data' },

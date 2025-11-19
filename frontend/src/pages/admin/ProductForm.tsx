@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { AdminLayout } from "@/components/layouts/AdminLayout";
 import { Button } from "@/components/ui/button";
+import { ArrowLeft, Save } from "lucide-react";
 import {
   Form,
   FormControl,
@@ -129,20 +130,67 @@ export function ProductForm() {
   useEffect(() => {
     loadCategories();
     if (id) {
-      // Load product data if editing
-      // This is just a placeholder, implement actual loading logic
+      loadProduct();
     }
   }, [id]);
 
+  const loadProduct = async () => {
+    try {
+      setLoading(true);
+      console.log('Chargement du produit...');
+      const product = await productService.getAdminProduct(Number(id));
+      console.log('Produit reçu:', product);
+      
+      if (product) {
+        form.reset({
+          title: product.title || "",
+          description: product.description || "",
+          sku: product.sku || "",
+          price: product.price || 0,
+          stock: product.stock || 0,
+          categoryId: product.categoryId || 0,
+          featured: product.featured || false,
+          images: undefined,
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement du produit:', error);
+      toast({
+        variant: "destructive",
+        title: "Erreur",
+        description: "Impossible de charger le produit",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <AdminLayout>
-      <div>
-        <h1 className="text-2xl font-bold mb-6">
-        {id ? "Modifier le produit" : "Créer un produit"}
-      </h1>
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100 p-4 sm:p-6 lg:p-8">
+        <div className="max-w-4xl mx-auto">
+          {/* Header */}
+          <div className="flex items-center gap-4 mb-8">
+            <Button 
+              variant="ghost" 
+              size="icon"
+              onClick={() => navigate('/admin/products')}
+              className="hover:bg-gray-100"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold text-gray-900">
+                {id ? "Modifier le produit" : "Créer un produit"}
+              </h1>
+              <p className="text-gray-600 mt-1">{id ? "Mettez à jour les détails du produit" : "Ajoutez un nouveau produit à votre catalogue"}</p>
+            </div>
+          </div>
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          {/* Form Card */}
+          <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 sm:p-8">
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
           <FormField
             control={form.control}
             name="title"
@@ -295,11 +343,29 @@ export function ProductForm() {
             )}
           />
 
-          <Button type="submit" disabled={loading}>
-            {loading ? "Enregistrement..." : "Enregistrer"}
-          </Button>
-        </form>
-      </Form>
+          {/* Submit Buttons */}
+          <div className="border-t border-gray-200 pt-8 flex gap-3">
+            <Button 
+              type="submit" 
+              disabled={loading}
+              className="flex-1 bg-gradient-to-r from-blue-600 to-emerald-600 hover:from-blue-700 hover:to-emerald-700 text-white h-11 text-base font-semibold border-0"
+            >
+              <Save className="h-4 w-4 mr-2" />
+              {loading ? "Enregistrement..." : "Enregistrer le produit"}
+            </Button>
+            <Button 
+              type="button"
+              variant="outline"
+              onClick={() => navigate('/admin/products')}
+              className="px-6"
+            >
+              Annuler
+            </Button>
+          </div>
+              </form>
+            </Form>
+          </div>
+        </div>
       </div>
     </AdminLayout>
   );

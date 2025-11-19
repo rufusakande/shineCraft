@@ -62,7 +62,7 @@ class SocketService {
         toast({
           title: 'Low Stock Alert',
           description: `${payload.productName} is running low (${payload.currentStock} remaining)`,
-          variant: 'warning',
+          variant: 'default',
         });
         break;
 

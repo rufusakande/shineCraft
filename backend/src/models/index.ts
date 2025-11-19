@@ -3,7 +3,9 @@ import User from './User';
 import Category from './Category';
 import Product from './Product';
 import Order from './Order';
+import Payment from './Payment';
 import Notification from './Notification';
+import AdminSettings from './AdminSettings';
 
 // Associations
 Product.belongsTo(Category, {
@@ -26,6 +28,16 @@ User.hasMany(Order, {
   as: 'orders',
 });
 
+Payment.belongsTo(Order, {
+  foreignKey: 'orderId',
+  as: 'order',
+});
+
+Order.hasOne(Payment, {
+  foreignKey: 'orderId',
+  as: 'payment',
+});
+
 Notification.belongsTo(User, {
   foreignKey: 'userId',
   as: 'user',
@@ -36,12 +48,24 @@ User.hasMany(Notification, {
   as: 'notifications',
 });
 
+AdminSettings.belongsTo(User, {
+  foreignKey: 'userId',
+  as: 'user',
+});
+
+User.hasOne(AdminSettings, {
+  foreignKey: 'userId',
+  as: 'settings',
+});
+
 export {
   User,
   Category,
   Product,
   Order,
+  Payment,
   Notification,
+  AdminSettings,
 };
 
 export default {
@@ -49,7 +73,9 @@ export default {
   Category,
   Product,
   Order,
+  Payment,
   Notification,
+  AdminSettings,
 };
 
 export { sequelize };

@@ -1,8 +1,8 @@
-import { useAuthContext } from "@/providers/AuthProvider";
+import { useAuth } from "@/providers/AuthProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export default function Profile() {
-  const { user } = useAuthContext();
+  const { user } = useAuth();
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -1,44 +1,46 @@
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "@/components/Navbar";
 import HeroSection from "@/components/HeroSection";
 import ProductCard from "@/components/ProductCard";
 import { Sparkles, Heart, Shield } from "lucide-react";
-import productRing from "@/assets/product-ring.jpg";
-import productNecklace from "@/assets/product-necklace.jpg";
-import productBracelet from "@/assets/product-bracelet.jpg";
-import productEarrings from "@/assets/product-earrings.jpg";
+import { productService, Product } from "@/lib/api";
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+
+const getImageUrl = (imagePath: string): string => {
+  if (!imagePath) return '';
+  if (imagePath.startsWith('http')) return imagePath;
+  return `${API_URL}${imagePath}`;
+};
 
 const Index = () => {
-  const featuredProducts = [
-    {
-      id: "1",
-      name: "Bague Florale Or",
-      price: 289.00,
-      image: productRing,
-      category: "Bagues"
-    },
-    {
-      id: "2",
-      name: "Collier Pendentif Rose",
-      price: 349.00,
-      image: productNecklace,
-      category: "Colliers"
-    },
-    {
-      id: "3",
-      name: "Bracelet Artisanal",
-      price: 199.00,
-      image: productBracelet,
-      category: "Bracelets"
-    },
-    {
-      id: "4",
-      name: "Boucles d'Oreilles Élégantes",
-      price: 159.00,
-      image: productEarrings,
-      category: "Boucles d'oreilles"
+  const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadFeaturedProducts();
+  }, []);
+
+  const loadFeaturedProducts = async () => {
+    try {
+      setLoading(true);
+      // Récupérer les produits
+      const products = await productService.getProducts();
+      console.log('Produits reçus:', products);
+      
+      if (Array.isArray(products)) {
+        // Filtrer les produits en vedette et limiter à 4
+        const featured = products.filter(p => p.featured).slice(0, 4);
+        setFeaturedProducts(featured.length > 0 ? featured : products.slice(0, 4));
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des produits:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const features = [
     {
@@ -60,7 +62,7 @@ const Index = () => {
 
   return (
     <div className="min-h-screen">
-      <Navbar cartCount={0} />
+      <Navbar />
       
       <HeroSection />
 
@@ -88,17 +90,34 @@ const Index = () => {
             viewport={{ once: true }}
             className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8"
           >
-            {featuredProducts.map((product, index) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <ProductCard {...product} />
-              </motion.div>
-            ))}
+            {loading ? (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">Chargement des produits...</p>
+              </div>
+            ) : featuredProducts.length > 0 ? (
+              featuredProducts.map((product, index) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1 }}
+                >
+                  <ProductCard 
+                    id={product.id}
+                    title={product.title}
+                    price={product.price}
+                    images={product.images}
+                    category={product.category?.name}
+                    slug={product.slug}
+                  />
+                </motion.div>
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className="text-gray-500">Aucun produit disponible</p>
+              </div>
+            )}
           </motion.div>
         </div>
       </section>
