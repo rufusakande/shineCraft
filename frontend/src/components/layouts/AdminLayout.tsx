@@ -243,10 +243,7 @@ export function AdminLayout({ children }: AdminLayoutProps) {
 
       {/* Main content */}
       <main
-        className={cn(
-          "min-h-screen transition-all duration-300 ease-in-out pt-16 lg:pl-72",
-          "w-full"
-        )}
+        className="min-h-screen transition-all duration-300 ease-in-out  lg:pl-72 w-full"
       >
         <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">{children}</div>
       </main>

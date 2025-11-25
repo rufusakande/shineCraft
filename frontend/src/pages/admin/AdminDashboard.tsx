@@ -6,7 +6,7 @@ import { BarChart, Bar, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, L
 import { Package, ShoppingCart, Users, TrendingUp, ArrowUpRight, ArrowDownRight, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 type StatCard = {
   label: string;

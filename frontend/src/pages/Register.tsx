@@ -1,20 +1,24 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/providers/AuthProvider";
 
 export default function Register() {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { register } = useAuth();
+  const { register, login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
+
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -34,9 +38,12 @@ export default function Register() {
       await register(email, password, username);
       toast({
         title: "Compte créé avec succès",
-        description: "Vous pouvez maintenant vous connecter",
+        description: "Vous êtes maintenant connecté",
       });
-      navigate("/login");
+      // Auto-login après inscription
+      await login(email, password);
+      // Redirection vers la page précédente ou accueil
+      navigate(from, { replace: true });
     } catch (error) {
       toast({
         variant: "destructive",
@@ -52,17 +59,18 @@ export default function Register() {
     <div className="container mx-auto flex items-center justify-center min-h-[calc(100vh-4rem)]">
       <Card className="w-full max-w-md">
         <CardHeader>
-          <CardTitle>Inscription</CardTitle>
+          <CardTitle>Créer un compte</CardTitle>
           <CardDescription>
-            Créez votre compte pour accéder à toutes les fonctionnalités
+            Inscrivez-vous pour accéder à toutes les fonctionnalités
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="username">Nom d'utilisateur</Label>
               <Input
                 id="username"
-                placeholder="Nom d'utilisateur"
+                placeholder="Choisissez un nom d'utilisateur"
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
@@ -70,9 +78,10 @@ export default function Register() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                placeholder="Email"
+                placeholder="votre@email.com"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -80,9 +89,10 @@ export default function Register() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
               <Input
                 id="password"
-                placeholder="Mot de passe"
+                placeholder="Minimum 6 caractères"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -90,9 +100,10 @@ export default function Register() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
               <Input
                 id="confirmPassword"
-                placeholder="Confirmer le mot de passe"
+                placeholder="Confirmez votre mot de passe"
                 type="password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
@@ -100,10 +111,20 @@ export default function Register() {
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col gap-4">
             <Button className="w-full" type="submit" disabled={isLoading}>
               {isLoading ? "Inscription en cours..." : "S'inscrire"}
             </Button>
+            <div className="text-center text-sm text-gray-600">
+              Déjà inscrit?{" "}
+              <Link 
+                to="/login"
+                state={{ from: location.state?.from }}
+                className="text-primary hover:underline font-semibold"
+              >
+                Se connecter ici
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>

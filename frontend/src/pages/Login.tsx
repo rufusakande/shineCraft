@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/providers/AuthProvider";
@@ -47,9 +48,10 @@ export default function Login() {
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
-                placeholder="Email"
+                placeholder="votre@email.com"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -57,9 +59,10 @@ export default function Login() {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="password">Mot de passe</Label>
               <Input
                 id="password"
-                placeholder="Mot de passe"
+                placeholder="Votre mot de passe"
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
@@ -67,10 +70,20 @@ export default function Login() {
               />
             </div>
           </CardContent>
-          <CardFooter>
+          <CardFooter className="flex flex-col gap-4">
             <Button className="w-full" type="submit" disabled={isLoading}>
               {isLoading ? "Connexion en cours..." : "Se connecter"}
             </Button>
+            <div className="text-center text-sm text-gray-600">
+              Pas encore de compte?{" "}
+              <Link 
+                to="/register" 
+                state={{ from: location.state?.from }}
+                className="text-primary hover:underline font-semibold"
+              >
+                S'inscrire ici
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>

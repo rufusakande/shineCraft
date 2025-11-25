@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import Navbar from '@/components/Navbar';
@@ -19,6 +19,7 @@ const getImageUrl = (imagePath: string): string => {
 
 export function Checkout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
   const { items, getTotalPrice } = useCart();
   const [loading, setLoading] = useState(false);
@@ -46,7 +47,10 @@ export function Checkout() {
           >
             <h1 className="text-3xl font-bold mb-4">Connexion requise</h1>
             <p className="text-gray-500 mb-8">Vous devez être connecté pour passer commande</p>
-            <Link to="/login">
+            <Link 
+              to="/login"
+              state={{ from: location }}
+            >
               <Button>Se connecter</Button>
             </Link>
           </motion.div>

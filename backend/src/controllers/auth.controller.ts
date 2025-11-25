@@ -5,7 +5,8 @@ import { User } from '../models';
 import { AuthRequest } from '../middlewares/auth.middleware';
 
 interface RegisterBody {
-  name: string;
+  username?: string;
+  name?: string;
   email: string;
   password: string;
 }
@@ -26,7 +27,10 @@ class AuthController {
 
   async register(req: Request<{}, {}, RegisterBody>, res: Response) {
     try {
-      const { name, email, password } = req.body;
+      const { name, username, email, password } = req.body;
+
+      // Use username as name if name is not provided
+      const displayName = name || username || email.split('@')[0];
 
       // Check if user exists
       const existingUser = await User.findOne({ where: { email } });
@@ -39,7 +43,7 @@ class AuthController {
 
       // Create user
       const user = await User.create({
-        name,
+        name: displayName,
         email,
         password: hashedPassword,
         role: 'customer', // Default role for registration
