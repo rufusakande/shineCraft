@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/table";
 import { AdminLayout } from "@/components/layouts/AdminLayout";
 import { Button } from "@/components/ui/button";
-import { Shield, User, Trash2, RefreshCw, ChevronLeft, ChevronRight } from "lucide-react";
+import { Shield, User, Trash2, RefreshCw, ChevronLeft, ChevronRight, X, Edit2 } from "lucide-react";
 import { toast } from "sonner";
+import { useToast } from "@/hooks/use-toast";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -33,6 +34,13 @@ export function UsersList() {
   const [filteredUsers, setFilteredUsers] = useState<UserType[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [roleFilter, setRoleFilter] = useState<string>('all');
+  const [selectedUser, setSelectedUser] = useState<UserType | null>(null);
+  const [showRoleModal, setShowRoleModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [newRole, setNewRole] = useState<'admin' | 'user'>('user');
+  const [updating, setUpdating] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const toastHook = useToast();
 
   useEffect(() => {
     fetchUsers();
@@ -57,7 +65,11 @@ export function UsersList() {
       }
     } catch (error) {
       console.error('Erreur lors de la récupération des utilisateurs:', error);
-      toast.error('Erreur lors du chargement des utilisateurs');
+      toastHook.toast({
+        title: 'Erreur',
+        description: 'Erreur lors du chargement des utilisateurs',
+        variant: 'destructive',
+      });
     } finally {
       setLoading(false);
       setRefreshing(false);
@@ -81,27 +93,99 @@ export function UsersList() {
     setFilteredUsers(filtered);
   };
 
-  const handleDelete = async (id: number, email: string) => {
-    if (!window.confirm(`Êtes-vous sûr de vouloir supprimer ${email} ?\nCette action est irréversible.`)) {
+  const handleChangeRole = (user: UserType) => {
+    setSelectedUser(user);
+    setNewRole(user.role === 'admin' ? 'user' : 'admin');
+    setShowRoleModal(true);
+  };
+
+  const updateUserRole = async () => {
+    if (!selectedUser || newRole === selectedUser.role) {
+      setShowRoleModal(false);
       return;
     }
 
     try {
+      setUpdating(true);
       const token = localStorage.getItem('token');
-      const response = await fetch(`${API_URL}/api/admin/users/${id}`, {
+      const response = await fetch(`${API_URL}/api/admin/users/${selectedUser.id}`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ role: newRole }),
+      });
+
+      if (response.ok) {
+        setUsers(users.map(u => 
+          u.id === selectedUser.id ? { ...u, role: newRole } : u
+        ));
+        toastHook.toast({
+          title: 'Succès',
+          description: `Rôle changé en ${newRole === 'admin' ? 'Admin' : 'Client'}`,
+        });
+        setShowRoleModal(false);
+      } else {
+        const error = await response.json();
+        toastHook.toast({
+          title: 'Erreur',
+          description: error.error || 'Impossible de changer le rôle',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      console.error('Erreur lors de la mise à jour:', error);
+      toastHook.toast({
+        title: 'Erreur',
+        description: 'Une erreur est survenue',
+        variant: 'destructive',
+      });
+    } finally {
+      setUpdating(false);
+    }
+  };
+
+  const handleDeleteClick = (user: UserType) => {
+    setSelectedUser(user);
+    setShowDeleteModal(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedUser) return;
+
+    try {
+      setDeleting(true);
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_URL}/api/admin/users/${selectedUser.id}`, {
         method: 'DELETE',
         headers: { 'Authorization': `Bearer ${token}` }
       });
 
       if (response.ok) {
-        setUsers(users.filter(u => u.id !== id));
-        toast.success('Utilisateur supprimé avec succès');
+        setUsers(users.filter(u => u.id !== selectedUser.id));
+        toastHook.toast({
+          title: 'Succès',
+          description: 'Utilisateur supprimé avec succès',
+        });
+        setShowDeleteModal(false);
       } else {
-        toast.error('Erreur lors de la suppression');
+        const error = await response.json();
+        toastHook.toast({
+          title: 'Erreur',
+          description: error.error || 'Erreur lors de la suppression',
+          variant: 'destructive',
+        });
       }
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
-      toast.error('Erreur lors de la suppression');
+      toastHook.toast({
+        title: 'Erreur',
+        description: 'Erreur lors de la suppression',
+        variant: 'destructive',
+      });
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -222,9 +306,18 @@ export function UsersList() {
                         <TableCell className="p-3 sm:p-4">
                           <div className="flex gap-1 sm:gap-2 justify-center">
                             <Button 
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleChangeRole(user)}
+                              className="hover:bg-blue-100 hover:text-blue-600 h-8 w-8 sm:h-9 sm:w-auto p-0 sm:px-3"
+                            >
+                              <Edit2 className="h-4 w-4" />
+                              <span className="hidden sm:inline ml-1">Rôle</span>
+                            </Button>
+                            <Button 
                               variant="destructive" 
                               size="sm"
-                              onClick={() => handleDelete(user.id, user.email)}
+                              onClick={() => handleDeleteClick(user)}
                               className="hover:bg-red-700 h-8 w-8 sm:h-9 sm:w-auto p-0 sm:px-3"
                             >
                               <Trash2 className="h-4 w-4" />
@@ -306,6 +399,137 @@ export function UsersList() {
           </div>
         </div>
       </div>
+
+      {/* Modal Change Role */}
+      {showRoleModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Changer le rôle</h2>
+              <button
+                onClick={() => setShowRoleModal(false)}
+                className="text-gray-500 hover:text-gray-700 transition"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 sm:p-6 space-y-4">
+              <div>
+                <p className="text-sm text-gray-600 mb-2">Utilisateur</p>
+                <p className="font-semibold text-gray-900">{selectedUser.email}</p>
+                <p className="text-sm text-gray-600">{selectedUser.name || '-'}</p>
+              </div>
+
+              <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                <p className="text-sm text-gray-700">
+                  <span className="font-semibold">Rôle actuel:</span> {selectedUser.role === 'admin' ? 'Admin' : 'Client'}
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-900 mb-3">Nouveau rôle</label>
+                <select
+                  value={newRole}
+                  onChange={(e) => setNewRole(e.target.value as 'admin' | 'user')}
+                  className="w-full px-4 py-2 rounded-lg border border-gray-200 bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="user">Client</option>
+                  <option value="admin">Admin</option>
+                </select>
+              </div>
+
+              <div className={`border-l-4 p-3 rounded ${newRole === 'admin' ? 'bg-red-50 border-red-300' : 'bg-blue-50 border-blue-300'}`}>
+                <p className={`text-sm ${newRole === 'admin' ? 'text-red-800' : 'text-blue-800'}`}>
+                  {newRole === 'admin' 
+                    ? '⚠️ Cet utilisateur aura accès aux fonctions administrateur'
+                    : '✓ Cet utilisateur aura accès uniquement aux fonctions client'
+                  }
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex gap-3 p-4 sm:p-6 border-t border-gray-200 bg-gray-50">
+              <Button
+                onClick={() => setShowRoleModal(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={updateUserRole}
+                disabled={updating}
+                className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {updating ? 'Mise à jour...' : 'Changer le rôle'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal Delete User */}
+      {showDeleteModal && selectedUser && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+          <div className="bg-white rounded-lg shadow-xl max-w-md w-full">
+            {/* Header */}
+            <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
+              <h2 className="text-lg sm:text-xl font-bold text-gray-900">Supprimer l'utilisateur</h2>
+              <button
+                onClick={() => setShowDeleteModal(false)}
+                className="text-gray-500 hover:text-gray-700 transition"
+              >
+                <X className="h-6 w-6" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="p-4 sm:p-6 space-y-4">
+              <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                <p className="text-sm text-red-800">
+                  ⚠️ <span className="font-semibold">Cette action est irréversible.</span> Êtes-vous vraiment sûr ?
+                </p>
+              </div>
+
+              <div>
+                <p className="text-sm text-gray-600 mb-2">Utilisateur à supprimer:</p>
+                <div className="bg-gray-50 border border-gray-200 rounded-lg p-3">
+                  <p className="font-semibold text-gray-900">{selectedUser.email}</p>
+                  <p className="text-sm text-gray-600">{selectedUser.name || '-'}</p>
+                </div>
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-lg p-3">
+                <p className="text-sm text-amber-800">
+                  ℹ️ Toutes les commandes de cet utilisateur seront également supprimées.
+                </p>
+              </div>
+            </div>
+
+            {/* Footer */}
+            <div className="flex gap-3 p-4 sm:p-6 border-t border-gray-200 bg-gray-50">
+              <Button
+                onClick={() => setShowDeleteModal(false)}
+                variant="outline"
+                className="flex-1"
+              >
+                Annuler
+              </Button>
+              <Button
+                onClick={confirmDelete}
+                disabled={deleting}
+                className="flex-1 bg-red-600 hover:bg-red-700 text-white"
+              >
+                {deleting ? 'Suppression...' : 'Supprimer définitivement'}
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </AdminLayout>
   );
 }

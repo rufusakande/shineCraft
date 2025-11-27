@@ -21,7 +21,10 @@ const Index = () => {
 
   useEffect(() => {
     loadFeaturedProducts();
+    scrollTo(0, 0);
   }, []);
+
+
 
   const loadFeaturedProducts = async () => {
     try {

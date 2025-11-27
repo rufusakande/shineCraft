@@ -5,6 +5,10 @@ const NotFound = () => {
   const location = useLocation();
 
   useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     console.error("404 Error: User attempted to access non-existent route:", location.pathname);
   }, [location.pathname]);
 

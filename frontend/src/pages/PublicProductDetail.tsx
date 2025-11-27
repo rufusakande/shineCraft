@@ -8,7 +8,7 @@ import { productService, Product } from '@/lib/api';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 const getImageUrl = (imagePath: string): string => {
   if (!imagePath) return '';
@@ -24,6 +24,10 @@ export function PublicProductDetail() {
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [isFavorite, setIsFavorite] = useState(false);
   const { addItem } = useCart();
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     loadProduct();
@@ -109,7 +113,7 @@ export function PublicProductDetail() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="mb-8 flex items-center gap-2 text-sm text-muted-foreground"
+            className="mb-8 flex items-center gap-2 text-sm text-muted-foreground pt-10"
           >
             <Link to="/" className="hover:text-foreground">Accueil</Link>
             <span>/</span>
@@ -176,7 +180,7 @@ export function PublicProductDetail() {
                       <img
                         src={img}
                         alt={`${product.title} ${index + 1}`}
-                        className="w-full h-full object-cover"
+                        className="object-cover"
                         crossOrigin="anonymous"
                       />
                     </motion.button>
@@ -201,7 +205,7 @@ export function PublicProductDetail() {
                 {/* Prix et stock */}
                 <div className="mb-6">
                   <p className="text-3xl font-bold text-primary mb-2">
-                    {numericPrice.toFixed(2)} €
+                    {numericPrice.toFixed(2)} XOF
                   </p>
                   <div className="flex items-center gap-4">
                     <span className={`px-3 py-1 rounded-full text-sm font-medium ${
@@ -269,8 +273,8 @@ export function PublicProductDetail() {
                 </div>
 
                 {/* Boutons d'action */}
-                <div className="flex gap-4 pt-4">
-                  <motion.div className="flex-1">
+                <div className="flex gap-4 pt-4 flex-wrap">
+                  <motion.div className='flex-1'>
                     <Button
                       onClick={handleAddToCart}
                       disabled={product.stock === 0}
@@ -281,7 +285,7 @@ export function PublicProductDetail() {
                       Ajouter au panier
                     </Button>
                   </motion.div>
-                  <motion.div className="flex-1">
+                  <motion.div className='flex-1'>
                     <Button
                       onClick={handleBuyNow}
                       disabled={product.stock === 0}
@@ -293,18 +297,18 @@ export function PublicProductDetail() {
                 </div>
 
                 {/* Boutons secondaires */}
-                <div className="flex gap-4 pt-2">
+                <div className="flex gap-4 pt-2 flex-wrap">
                   <button
                     onClick={() => setIsFavorite(!isFavorite)}
-                    className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-smooth"
+                    className="flex-1 flex items-center justify-center gap-1 p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-smooth"
                   >
                     <Heart
-                      className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`}
+                      className={`lg:h-5 lg:w-5 sm:h-2 sm:w-2 ${isFavorite ? 'fill-red-500 text-red-500' : ''}`}
                     />
                     Ajouter à mes favoris
                   </button>
-                  <button className="flex-1 flex items-center justify-center gap-2 py-3 border border-gray-300 rounded-lg hover:bg-gray-50 transition-smooth">
-                    <Share2 className="h-5 w-5" />
+                  <button className="flex-1 flex items-center justify-center gap-1 p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-smooth">
+                    <Share2 className="lg:h-5 lg:w-5 sm:h-2 sm:w-2" />
                     Partager
                   </button>
                 </div>

@@ -87,18 +87,18 @@ export function AdminLayout({ children }: AdminLayoutProps) {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-100">
+    <div className="flex h-screen flex-col w-full bg-gradient-to-br from-slate-50 via-white to-slate-100">
       {/* Overlay mobile */}
       {sidebarOpen && isMobile && (
         <div
-          className="fixed inset-0 z-30 bg-black/50 transition-opacity duration-300 lg:hidden"
+          className="fixed inset-0 z-30  bg-gradient-to-br from-slate-50 via-white to-slate-100 transition-opacity duration-300 lg:hidden"
           onClick={() => setSidebarOpen(false)}
           aria-hidden="true"
         />
       )}
 
       {/* Header */}
-      <header className="fixed top-0 z-50 w-full bg-white border-b border-gray-200 shadow-sm">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 shadow-sm">
         <div className="flex h-16 items-center justify-between px-3 sm:px-4 md:px-6 lg:px-8">
           {/* Left: Menu button + Logo */}
           <div className="flex items-center gap-3">
@@ -197,56 +197,59 @@ export function AdminLayout({ children }: AdminLayoutProps) {
         </div>
       </header>
 
-      {/* Sidebar */}
-      <aside
-        className={cn(
-          "fixed inset-y-0 left-0 z-40 flex w-64 sm:w-72 flex-col transition-transform duration-300 ease-in-out pt-16 lg:translate-x-0 lg:static lg:inset-auto",
-          sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        )}
-      >
-        <div className="flex h-full flex-grow flex-col overflow-y-auto border-r border-gray-200 bg-white">
-          <nav className="flex flex-1 flex-col px-3 sm:px-4 py-4">
-            <ul role="list" className="flex flex-1 flex-col gap-2">
-              {navigation.map((item) => {
-                const isActive = location.pathname === item.href;
-                return (
-                  <li key={item.name}>
-                    <Link
-                      to={item.href}
-                      className={cn(
-                        "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
-                        isActive
-                          ? "bg-gradient-to-r from-blue-50 to-emerald-50 text-blue-600 border border-blue-100 shadow-sm"
-                          : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
-                      )}
-                      onClick={() => {
-                        if (isMobile) {
-                          setSidebarOpen(false);
-                        }
-                      }}
-                    >
-                      <item.icon className="h-5 w-5 shrink-0" />
-                      <span className="truncate">{item.name}</span>
-                    </Link>
-                  </li>
-                );
-              })}
-            </ul>
-          </nav>
+      {/* Main container with sidebar and content */}
+      <div className="flex flex-1 pt-16  bg-gradient-to-br from-slate-50 via-white to-slate-100">
+        {/* Sidebar */}
+        <aside
+          className={cn(
+            "fixed inset-y-16 left-0 z-40 w-64 sm:w-72 flex-col transition-transform duration-300 ease-in-out lg:static lg:inset-auto lg:z-auto",
+            sidebarOpen ? "translate-x-0 flex" : "-translate-x-full hidden lg:flex"
+          )}
+        >
+          <div className="flex h-[calc(100vh-64px)] flex-col overflow-y-auto border-r border-gray-200 bg-white">
+            <nav className="flex flex-1 flex-col px-3 sm:px-4 py-4">
+              <ul role="list" className="flex flex-1 flex-col gap-2">
+                {navigation.map((item) => {
+                  const isActive = location.pathname === item.href;
+                  return (
+                    <li key={item.name}>
+                      <Link
+                        to={item.href}
+                        className={cn(
+                          "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                          isActive
+                            ? "bg-gradient-to-r from-blue-50 to-emerald-50 text-blue-600 border border-blue-100 shadow-sm"
+                            : "text-gray-700 hover:bg-gray-50 hover:text-blue-600"
+                        )}
+                        onClick={() => {
+                          if (isMobile) {
+                            setSidebarOpen(false);
+                          }
+                        }}
+                      >
+                        <item.icon className="h-5 w-5 shrink-0" />
+                        <span className="truncate">{item.name}</span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </nav>
 
-          {/* Footer info */}
-          <div className="border-t border-gray-200 px-3 sm:px-4 py-4">
-            <p className="text-xs text-gray-500">shineCraft © 2025</p>
+            {/* Footer info */}
+            <div className="border-t border-gray-200 px-3 sm:px-4 py-4">
+              <p className="text-xs text-gray-500">shineCraft © 2025</p>
+            </div>
           </div>
-        </div>
-      </aside>
+        </aside>
 
-      {/* Main content */}
-      <main
-        className="min-h-screen transition-all duration-300 ease-in-out  lg:pl-72 w-full"
-      >
-        <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">{children}</div>
-      </main>
+        {/* Main content */}
+        <main className="flex-1 overflow-y-auto w-full">
+          <div className="px-3 sm:px-4 md:px-6 lg:px-8 py-6 sm:py-8">
+            {children}
+          </div>
+        </main>
+      </div>
     </div>
   );
 }

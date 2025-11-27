@@ -10,7 +10,7 @@ import { useAuth } from '@/providers/AuthProvider';
 import { toast } from 'sonner';
 import { useNavigate } from 'react-router-dom';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL = import.meta.env.VITE_API_URL;
 
 interface UserStats {
   totalOrders: number;
@@ -36,6 +36,10 @@ export function UserProfile() {
     firstName: user?.firstName || '',
     lastName: user?.lastName || '',
   });
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   useEffect(() => {
     if (user) {
@@ -67,6 +71,18 @@ export function UserProfile() {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
+  const handleCancel = () => {
+    // Reset form data to user state
+    setFormData({
+      name: user?.name || '',
+      email: user?.email || '',
+      phone: user?.phone || '',
+      firstName: user?.firstName || '',
+      lastName: user?.lastName || '',
+    });
+    setIsEditing(false);
+  };
+
   const fetchUserStats = async () => {
     setIsLoadingStats(true);
     try {
@@ -82,6 +98,16 @@ export function UserProfile() {
       }
 
       const data = await response.json();
+      
+      // Update form data with fetched data
+      setFormData({
+        firstName: data.firstName || '',
+        lastName: data.lastName || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        name: data.name || '',
+      });
+
       setStats({
         totalOrders: data.totalOrders || 0,
         totalSpent: data.totalSpent || 0,
@@ -89,6 +115,7 @@ export function UserProfile() {
       });
     } catch (error) {
       console.error('Erreur:', error);
+      toast.error('Erreur lors du chargement des statistiques');
       setStats({
         totalOrders: 0,
         totalSpent: 0,
@@ -100,6 +127,17 @@ export function UserProfile() {
   };
 
   const handleSave = async () => {
+    // Validation
+    if (!formData.firstName || !formData.lastName) {
+      toast.error('Veuillez remplir le prénom et le nom');
+      return;
+    }
+
+    if (!formData.name) {
+      toast.error('Veuillez remplir le nom d\'affichage');
+      return;
+    }
+
     setIsLoading(true);
     try {
       const token = localStorage.getItem('token');
@@ -109,22 +147,21 @@ export function UserProfile() {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          name: formData.name,
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          phone: formData.phone || '',
+        }),
       });
 
       if (!response.ok) {
-        throw new Error('Erreur lors de la mise à jour');
+        const errorData = await response.json();
+        throw new Error(errorData.message || 'Erreur lors de la mise à jour');
       }
 
       const data = await response.json();
       
-      // Update stats with response data
-      setStats({
-        totalOrders: data.totalOrders || 0,
-        totalSpent: data.totalSpent || 0,
-        memberSince: data.memberSince ? new Date(data.memberSince).toLocaleDateString('fr-FR') : 'N/A',
-      });
-
       // Update form data with response
       setFormData({
         name: data.name || '',
@@ -134,10 +171,18 @@ export function UserProfile() {
         lastName: data.lastName || '',
       });
 
+      // Update stats
+      setStats({
+        totalOrders: data.totalOrders || 0,
+        totalSpent: data.totalSpent || 0,
+        memberSince: data.memberSince ? new Date(data.memberSince).toLocaleDateString('fr-FR') : 'N/A',
+      });
+
       toast.success('Profil mis à jour avec succès!');
       setIsEditing(false);
     } catch (error) {
-      toast.error('Erreur lors de la mise à jour du profil');
+      console.error('Erreur:', error);
+      toast.error(error instanceof Error ? error.message : 'Erreur lors de la mise à jour du profil');
     } finally {
       setIsLoading(false);
     }
@@ -160,7 +205,7 @@ export function UserProfile() {
 
             {/* Profil Card */}
             <Card className="mb-6">
-              <CardHeader className="flex flex-row items-center justify-between">
+              <CardHeader className="flex flex-row items-center justify-between flex-wrap">
                 <CardTitle className="flex items-center gap-2">
                   <User className="h-5 w-5" />
                   Informations Personnelles
@@ -249,7 +294,8 @@ export function UserProfile() {
                       </Button>
                       <Button
                         variant="outline"
-                        onClick={() => setIsEditing(false)}
+                        onClick={handleCancel}
+                        disabled={isLoading}
                         className="flex-1"
                       >
                         <X className="h-4 w-4 mr-2" />
@@ -262,25 +308,22 @@ export function UserProfile() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div className="p-3 bg-gray-50 rounded-lg">
                         <p className="text-xs text-gray-600 mb-1">Prénom</p>
-                        <p className="font-semibold text-lg">{formData.firstName || 'Non renseigné'}</p>
+                        <p className="font-semibold text-xs text-wrap">{formData.firstName || 'Non renseigné'}</p>
                       </div>
                       <div className="p-3 bg-gray-50 rounded-lg">
                         <p className="text-xs text-gray-600 mb-1">Nom</p>
-                        <p className="font-semibold text-lg">{formData.lastName || 'Non renseigné'}</p>
+                        <p className="font-semibold text-xs">{formData.lastName || 'Non renseigné'}</p>
                       </div>
                     </div>
 
                     <div className="p-3 bg-gray-50 rounded-lg">
                       <p className="text-xs text-gray-600 mb-1">Nom d'affichage</p>
-                      <p className="font-semibold text-lg">{formData.name}</p>
+                      <p className="font-semibold text-xs">{formData.name}</p>
                     </div>
 
-                    <div className="p-3 bg-gray-50 rounded-lg flex items-start gap-3">
-                      <Mail className="h-5 w-5 text-gray-400 mt-1" />
-                      <div>
-                        <p className="text-xs text-gray-600 mb-1">Email</p>
-                        <p className="font-semibold text-lg">{formData.email}</p>
-                      </div>
+                    <div className="p-3 bg-gray-50 rounded-lg">
+                      <p className="text-xs text-gray-600 mb-1">Email</p>
+                      <p className="font-semibold text-xs ">{formData.email}</p>
                     </div>
 
                     {formData.phone && (

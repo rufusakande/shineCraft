@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -37,6 +37,10 @@ export function CheckoutGuest() {
     country: 'France',
     shippingMethod: 'standard'
   });
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   const handleAuthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

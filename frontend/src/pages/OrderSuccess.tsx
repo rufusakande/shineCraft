@@ -26,6 +26,10 @@ export function OrderSuccess() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+
+  useEffect(() => {
     const orderData = sessionStorage.getItem('orderData');
     const paymentData = sessionStorage.getItem('paymentData');
     
@@ -71,7 +75,7 @@ export function OrderSuccess() {
       <Navbar />
 
       <div className="pt-20 pb-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -108,14 +112,14 @@ export function OrderSuccess() {
 
               {/* Informations générales */}
               <div className="mb-6 pb-6 border-b">
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid lg:grid-cols-2 gap-4 sm:grid-cols-1">
                   <div>
                     <p className="text-gray-600 text-sm">Numéro de commande</p>
                     <p className="font-semibold">{order?.reference || '#' + order?.id}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm">ID de transaction</p>
-                    <p className="font-semibold">{payment?.transactionId || 'N/A'}</p>
+                    <p className="font-semibold">{payment?.id || 'N/A'}</p>
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm">Nom client</p>
@@ -131,7 +135,7 @@ export function OrderSuccess() {
                   </div>
                   <div>
                     <p className="text-gray-600 text-sm">Statut</p>
-                    <p className="font-semibold text-green-600 capitalize">{order?.status || 'pending'}</p>
+                    <p className="font-semibold text-green-600 capitalize">{order?.status || 'N/A'}</p>
                   </div>
                 </div>
               </div>
@@ -173,7 +177,7 @@ export function OrderSuccess() {
                 <div className="flex justify-between">
                   <span className="text-gray-600">Livraison ({order?.shippingMethod || 'standard'})</span>
                   <span className="font-semibold">
-                    {order?.shippingMethod === 'express' ? formatPrice(15) : formatPrice(0)}
+                    {order?.shippingMethod === 'express' ? formatPrice(import.meta.env.VITE_SHIPPING_EXPRESS_PRICE) : formatPrice(0)}
                   </span>
                 </div>
                 <div className="flex justify-between text-lg font-bold pt-3 border-t border-gray-300">

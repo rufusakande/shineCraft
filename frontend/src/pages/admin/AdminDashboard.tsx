@@ -55,7 +55,7 @@ export function AdminDashboard() {
 
       if (productsRes.ok) {
         const data = await productsRes.json();
-        products = Array.isArray(data) ? data : data.products || [];
+        products = data.success ? (data.data?.items || []) : (Array.isArray(data) ? data : data.products || []);
       }
 
       if (ordersRes.ok) {

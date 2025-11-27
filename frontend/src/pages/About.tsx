@@ -1,8 +1,15 @@
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import { Heart, Users, Award } from "lucide-react";
+import { useEffect } from "react";
+
 
 const About = () => {
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+  
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

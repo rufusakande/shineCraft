@@ -56,8 +56,8 @@ export function AdminProfile() {
       const data = await response.json();
       setProfile(data.data);
       setFormData({
-        firstName: data.data.firstName,
-        lastName: data.data.lastName,
+        firstName: data.data.firstName || '',
+        lastName: data.data.lastName || '',
         email: data.data.email,
         phone: data.data.phone || '',
       });
@@ -111,7 +111,9 @@ export function AdminProfile() {
 
   const getInitials = () => {
     if (!profile) return 'A';
-    return (profile.firstName[0] + profile.lastName[0]).toUpperCase();
+    const firstName = profile.firstName || 'A';
+    const lastName = profile.lastName || 'U';
+    return (firstName[0] + lastName[0]).toUpperCase();
   };
 
   if (loading) {
@@ -180,7 +182,7 @@ export function AdminProfile() {
               </Avatar>
               <div className="text-center sm:text-left flex-1">
                 <h2 className="text-2xl font-bold text-gray-900">
-                  {profile?.firstName} {profile?.lastName}
+                  {profile?.firstName || 'Admin'} {profile?.lastName || 'User'}
                 </h2>
                 <div className="flex items-center gap-2 mt-2 justify-center sm:justify-start flex-wrap">
                   <Badge className="bg-gradient-to-r from-blue-600 to-cyan-600">

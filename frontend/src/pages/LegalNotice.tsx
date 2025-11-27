@@ -1,8 +1,14 @@
 import Navbar from '@/components/Navbar';
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useEffect } from 'react';
 
 const LegalNotice = () => {
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />

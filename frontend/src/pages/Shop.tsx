@@ -12,6 +12,10 @@ const Shop = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+  
   const categories = ["Tout"];
 
   // Charger les produits depuis la base de données

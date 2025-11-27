@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { ShoppingBag, ChevronDown, TrendingUp, Calendar, DollarSign, Package } from 'lucide-react';
+import { ShoppingBag, ChevronDown, TrendingUp, Calendar, DollarSign, Package, Wallet, Download } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -59,6 +59,10 @@ export function UserOrders() {
   const [isLoading, setIsLoading] = useState(true);
   const [expandedOrderId, setExpandedOrderId] = useState<number | null>(null);
 
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+  
   if (!user) {
     return (
       <div className="min-h-screen bg-background">
@@ -108,6 +112,42 @@ export function UserOrders() {
     }
   };
 
+  const downloadInvoice = async (orderId: number) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`${API_URL}/api/orders/${orderId}/invoice`, {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Erreur lors du téléchargement de la facture');
+      }
+
+      // Get the PDF blob
+      const blob = await response.blob();
+      
+      // Create a temporary URL for the blob
+      const url = window.URL.createObjectURL(blob);
+      
+      // Create a temporary link and click it to download
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `facture-${orderId}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      
+      // Clean up
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success('Facture téléchargée avec succès');
+    } catch (error) {
+      toast.error('Erreur lors du téléchargement de la facture');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
@@ -146,7 +186,7 @@ export function UserOrders() {
                         {((orders && orders.length > 0) ? orders.reduce((sum, order) => sum + (typeof order.total === 'number' ? order.total : 0), 0) : 0).toFixed(0)} XOF
                       </p>
                     </div>
-                    <DollarSign className="h-8 w-8 text-primary/30" />
+                    <Wallet className="h-8 w-8 text-primary/30" />
                   </div>
                 </CardContent>
               </Card>
@@ -206,7 +246,7 @@ export function UserOrders() {
                                 {new Date(order.createdAt).toLocaleDateString('fr-FR')}
                               </div>
                               <div className="flex items-center gap-1">
-                                <DollarSign className="h-4 w-4" />
+                                <Wallet className="h-4 w-4" />
                                 {Number(order.total).toFixed(0)} XOF
                               </div>
                             </div>
@@ -292,15 +332,25 @@ export function UserOrders() {
                             <div className="p-3 bg-blue-50 rounded-lg text-sm">
                               <p className="text-gray-700">
                                 <strong>Statut de paiement:</strong>{' '}
-                                <span className={order.paymentStatus === 'completed' ? 'text-green-600' : 'text-yellow-600'}>
-                                  {order.paymentStatus === 'completed' ? 'Payé' : 'En attente'}
+                                <span className={order.status === 'paid' ? 'text-green-600' : 'text-yellow-600'}>
+                                  {order.status === 'paid' ? 'Payé' : 'En attente'}
                                 </span>
                               </p>
                             </div>
 
                             {/* Actions */}
-                            <div className="flex gap-2 pt-4">
-                              <Button variant="outline" className="flex-1" onClick={() => navigate('/shop')}>
+                            <div className="flex gap-2 pt-4 flex-wrap">
+                              <Button 
+                                variant="outline"
+                                onClick={() => downloadInvoice(order.id)}
+                              >
+                                <Download className="h-4 w-4 mr-2" />
+                                Télécharger la facture
+                              </Button>
+                              <Button 
+                                variant="outline"  
+                                onClick={() => navigate('/shop')}
+                              >
                                 Renouveler la commande
                               </Button>
                             </div>

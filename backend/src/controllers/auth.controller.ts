@@ -3,6 +3,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { User } from '../models';
 import { AuthRequest } from '../middlewares/auth.middleware';
+import emailService from '../services/email.service';
 
 interface RegisterBody {
   username?: string;
@@ -48,6 +49,11 @@ class AuthController {
         password: hashedPassword,
         role: 'customer', // Default role for registration
       });
+
+      // Send welcome email (fire and forget - don't wait for it)
+      emailService
+        .sendWelcomeEmail(user.email, user.name)
+        .catch((err) => console.error('Failed to send welcome email:', err));
 
       // Generate token
       const token = this.generateToken(user);

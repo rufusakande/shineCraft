@@ -48,7 +48,7 @@ const Footer = () => {
     {
       icon: Phone,
       label: 'Téléphone',
-      value: '+229 XX XX XX XX',
+      value: '+229 01 51 08 09 83',
     },
     {
       icon: Mail,
@@ -58,7 +58,7 @@ const Footer = () => {
     {
       icon: MapPin,
       label: 'Adresse',
-      value: 'Cotonou, Bénin',
+      value: 'Parakou, Bénin',
     },
   ];
 
@@ -84,7 +84,7 @@ const Footer = () => {
             <p className="text-lg mb-6 opacity-90">
               Recevez nos meilleures offres et les nouvelles collections directement dans votre boîte mail
             </p>
-            <div className="flex gap-3 max-w-md mx-auto">
+            <div className="flex gap-3 max-w-md mx-auto flex-wrap">
               <input
                 type="email"
                 placeholder="Votre adresse email"

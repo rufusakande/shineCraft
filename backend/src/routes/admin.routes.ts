@@ -7,6 +7,7 @@ import productController from '../controllers/product.controller';
 import { adminProfileController, adminSettingsController } from '../controllers/admin.controller';
 import Order from '../models/Order';
 import User from '../models/User';
+import Payment from '../models/Payment';
 
 const router = express.Router();
 
@@ -73,6 +74,35 @@ router.get('/orders/:id', async (req, res) => {
   }
 });
 
+router.put('/orders/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { status } = req.body;
+
+    // Validation
+    const validStatuses = ['pending', 'paid', 'shipped', 'delivered', 'cancelled'];
+    if (!status || !validStatuses.includes(status)) {
+      return res.status(400).json({ error: 'Statut invalide' });
+    }
+
+    const order = await Order.findByPk(id);
+    if (!order) {
+      return res.status(404).json({ error: 'Commande non trouvée' });
+    }
+
+    await order.update({ status });
+    
+    res.json({
+      success: true,
+      message: 'Statut mis à jour avec succès',
+      data: order
+    });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de la commande:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
 // Users routes
 router.get('/users', async (req, res) => {
   try {
@@ -100,6 +130,83 @@ router.get('/users/:id', async (req, res) => {
   } catch (error) {
     console.error('Erreur lors de la récupération de l\'utilisateur:', error);
     res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+router.put('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { role } = req.body;
+
+    // Validation
+    const validRoles = ['admin', 'user'];
+    if (role && !validRoles.includes(role)) {
+      return res.status(400).json({ error: 'Rôle invalide' });
+    }
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    if (role) {
+      await user.update({ role });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Utilisateur mis à jour avec succès',
+      data: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        createdAt: user.createdAt
+      }
+    });
+  } catch (error) {
+    console.error('Erreur lors de la mise à jour de l\'utilisateur:', error);
+    res.status(500).json({ error: 'Erreur serveur' });
+  }
+});
+
+router.delete('/users/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const user = await User.findByPk(id);
+    if (!user) {
+      return res.status(404).json({ error: 'Utilisateur non trouvé' });
+    }
+
+    // Récupérer toutes les commandes de l'utilisateur
+    const userOrders = await Order.findAll({
+      where: { userId: id }
+    });
+
+    // Supprimer les paiements associés à ces commandes
+    if (userOrders.length > 0) {
+      const orderIds = userOrders.map(order => order.id);
+      await Payment.destroy({
+        where: { orderId: orderIds }
+      });
+    }
+
+    // Supprimer les commandes de l'utilisateur
+    await Order.destroy({
+      where: { userId: id }
+    });
+
+    // Enfin, supprimer l'utilisateur
+    await user.destroy();
+    
+    res.json({
+      success: true,
+      message: 'Utilisateur et toutes ses données associées ont été supprimés avec succès'
+    });
+  } catch (error) {
+    console.error('Erreur lors de la suppression de l\'utilisateur:', error);
+    res.status(500).json({ error: 'Erreur serveur lors de la suppression' });
   }
 });
 

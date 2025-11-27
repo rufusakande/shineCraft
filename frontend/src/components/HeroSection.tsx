@@ -34,7 +34,7 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
-            className="text-primary font-medium mb-6 text-lg tracking-wide"
+            className="text-primary font-medium mb-6 text-lg tracking-wide pt-10 "
           >
             COLLECTION 2025
           </motion.p>
@@ -46,7 +46,7 @@ const HeroSection = () => {
             className="text-5xl sm:text-6xl lg:text-7xl font-serif font-bold mb-6 leading-tight"
           >
             L'artisanat rencontre
-            <span className="block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+            <span className="py-4 block bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent">
               l'élégance
             </span>
           </motion.h1>
@@ -55,7 +55,7 @@ const HeroSection = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.7 }}
-            className="text-xl sm:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto"
+            className="text-xl text-black sm:text-2xl text-muted-foreground mb-12 max-w-2xl mx-auto"
           >
             Découvrez nos créations uniques, façonnées à la main avec passion et savoir-faire artisanal
           </motion.p>
@@ -64,7 +64,7 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.9 }}
-            className="flex flex-col sm:flex-row gap-4 justify-center items-center"
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-20"
           >
             <Link to="/shop">
               <Button size="lg" className="text-lg px-8 py-6 rounded-full shadow-lg hover:shadow-xl transition-smooth">

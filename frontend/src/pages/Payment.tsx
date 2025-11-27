@@ -26,6 +26,10 @@ export function Payment() {
   const [paymentInitialized, setPaymentInitialized] = useState(false);
   const [paymentData, setPaymentData] = useState<any>(null);
 
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+  
   const checkoutData = sessionStorage.getItem('checkout')
     ? JSON.parse(sessionStorage.getItem('checkout')!)
     : null;
@@ -64,7 +68,7 @@ export function Payment() {
           'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({
-          amount: getTotalPrice() + (checkoutData.shippingMethod === 'express' ? 15 : 0),
+          amount: getTotalPrice() + (checkoutData.shippingMethod === 'express' ? parseInt(import.meta.env.VITE_SHIPPING_EXPRESS_PRICE) : 0),
           items: items.map(item => ({
             productId: item.product.id,
             quantity: item.quantity,
@@ -153,7 +157,7 @@ export function Payment() {
   };
 
   const totalPrice = getTotalPrice();
-  const shippingCost = checkoutData.shippingMethod === 'express' ? 15 : 0;
+  const shippingCost = checkoutData.shippingMethod === 'express' ? parseInt(import.meta.env.VITE_SHIPPING_EXPRESS_PRICE) : 0;
   const finalTotal = totalPrice + shippingCost;
 
   return (
@@ -188,7 +192,7 @@ export function Payment() {
                     </div>
 
                     <PaymentButton
-                      amount={getTotalPrice() + (checkoutData.shippingMethod === 'express' ? 15 : 0)}
+                      amount={getTotalPrice() + (checkoutData.shippingMethod === 'express' ? parseInt(import.meta.env.VITE_SHIPPING_EXPRESS_PRICE) : 0)}
                       reference={paymentData.reference}
                       email={paymentData.email}
                       phone={paymentData.phone}

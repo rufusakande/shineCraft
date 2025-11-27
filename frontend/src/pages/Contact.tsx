@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Mail, Phone, MapPin } from "lucide-react";
 import { toast } from "sonner";
+import { useEffect } from "react";
 
 const Contact = () => {
   const handleSubmit = (e: React.FormEvent) => {
@@ -14,6 +15,10 @@ const Contact = () => {
       duration: 4000,
     });
   };
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-background">

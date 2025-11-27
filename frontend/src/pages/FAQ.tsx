@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChevronDown } from 'lucide-react';
 import { useState } from 'react';
+import { useEffect } from 'react';
 
 interface FAQItem {
   question: string;
@@ -13,6 +14,10 @@ interface FAQItem {
 const FAQ = () => {
   const [expandedId, setExpandedId] = useState<number | null>(null);
 
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
+  
   const faqItems: FAQItem[] = [
     {
       category: 'Commandes',

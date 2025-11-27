@@ -53,9 +53,11 @@ import adminRoutes from './routes/admin.routes';
 import publicRoutes from './routes/public.routes';
 import paymentRoutes from './routes/payments';
 import userRoutes from './routes/user.routes';
+import orderRoutes from './routes/order.routes';
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/orders', orderRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api', publicRoutes);

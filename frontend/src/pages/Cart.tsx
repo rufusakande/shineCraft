@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { useCart } from '@/contexts/CartContext';
 import { useAuth } from '@/providers/AuthProvider';
 import { formatPrice } from '@/lib/priceFormatter';
+import { useEffect } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -19,6 +20,10 @@ export function Cart() {
   const { items, removeItem, updateQuantity, getTotalPrice, getTotalItems, clearCart } = useCart();
   const { user } = useAuth();
   const totalPrice = getTotalPrice();
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   if (items.length === 0) {
     return (
@@ -47,7 +52,7 @@ export function Cart() {
       <Navbar cartCount={getTotalItems()} />
 
       <div className="pt-20 pb-16">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 pt-10">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -82,7 +87,7 @@ export function Cart() {
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
                       transition={{ delay: index * 0.1 }}
-                      className={`flex gap-6 py-6 ${index !== items.length - 1 ? 'border-b' : ''}`}
+                      className={`flex gap-6 flex-wrap py-6 ${index !== items.length - 1 ? 'border-b' : ''}`}
                     >
                       {/* Image */}
                       <Link
@@ -98,7 +103,7 @@ export function Cart() {
                       </Link>
 
                       {/* Infos */}
-                      <div className="flex-1 flex flex-col justify-between">
+                      <div className="flex flex-col justify-between w-auto">
                         <div>
                           <Link
                             to={`/product/${item.product.slug}`}
@@ -116,7 +121,7 @@ export function Cart() {
                       </div>
 
                       {/* Quantité et suppression */}
-                      <div className="flex flex-col gap-4 items-end">
+                      <div className="flex lg:flex-col flex-row-reverse gap-4 items-end">
                         <button
                           onClick={() => removeItem(item.product.id)}
                           className="text-red-500 hover:text-red-700 transition-smooth"
@@ -193,7 +198,7 @@ export function Cart() {
 
                 {/* Bouton checkout */}
                 <motion.div whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}>
-                  <Link to="/checkout-guest" className="block">
+                  <Link to="/checkout" className="block">
                     <Button className="w-full py-6 text-lg">
                       Passer la commande
                       <ArrowRight className="ml-2 h-5 w-5" />

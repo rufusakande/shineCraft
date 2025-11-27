@@ -1,8 +1,12 @@
 import { useAuth } from "@/providers/AuthProvider";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
 
 export default function Profile() {
   const { user } = useAuth();
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="container mx-auto px-4 py-8">

@@ -27,12 +27,12 @@ const Navbar = () => {
       className="fixed top-0 left-0 right-0 z-50 glass-card border-b"
     >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-20">
+        <div className="flex items-center justify-between h-20 ">
           {/* Logo */}
           <Link to="/" className="flex items-center space-x-2">
             <motion.h1 
               whileHover={{ scale: 1.05 }}
-              className="text-2xl sm:text-3xl font-serif font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent"
+              className="text-2xl sm:text-3xl font-serif font-bold bg-gradient-to-r from-primary to-primary bg-clip-text text-transparent"
             >
               Shinecraft
             </motion.h1>
@@ -55,18 +55,18 @@ const Navbar = () => {
           </div>
 
           {/* Actions */}
-          <div className="flex items-center space-x-4">
-            <Button variant="ghost" size="icon" className="hidden sm:flex">
-              <Search className="h-5 w-5" />
+          <div className="flex items-center gap-1 sm:gap-2">
+            <Button variant="ghost" size="icon" className="hidden sm:flex h-9 w-9">
+              <Search className="h-4 w-4" />
             </Button>
             <Link to="/cart">
-              <Button variant="ghost" size="icon" className="relative">
-                <ShoppingCart className="h-5 w-5" />
+              <Button variant="ghost" size="icon" className="relative h-9 w-9">
+                <ShoppingCart className="h-4 w-4" />
                 {cartCount > 0 && (
                   <motion.span 
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium"
+                    className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-primary text-primary-foreground text-xs flex items-center justify-center font-medium"
                   >
                     {cartCount}
                   </motion.span>
@@ -78,15 +78,15 @@ const Navbar = () => {
             {user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="icon">
-                    <User className="h-5 w-5" />
+                  <Button variant="ghost" size="icon" className="h-9 w-9">
+                    <User className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel className="font-semibold">
+                <DropdownMenuContent align="end" className="w-48">
+                  <DropdownMenuLabel className="font-semibold truncate text-sm">
                     {user.name || user.email}
                   </DropdownMenuLabel>
-                  <DropdownMenuLabel className="text-xs text-gray-500 font-normal">
+                  <DropdownMenuLabel className="text-xs text-gray-500 font-normal truncate">
                     {user.email}
                   </DropdownMenuLabel>
                   <DropdownMenuSeparator />
@@ -111,8 +111,8 @@ const Navbar = () => {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <Link to="/login">
-                <Button variant="default" size="sm">
+              <Link to="/login" className="hidden sm:block">
+                <Button variant="default" size="sm" className="h-9">
                   Se connecter
                 </Button>
               </Link>
@@ -121,10 +121,10 @@ const Navbar = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden"
+              className="md:hidden h-9 w-9"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
-              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              {isMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
             </Button>
           </div>
         </div>
@@ -139,35 +139,48 @@ const Navbar = () => {
             exit={{ opacity: 0, height: 0 }}
             className="md:hidden glass border-t overflow-hidden"
           >
-            <div className="px-4 py-6 space-y-4">
+            <div className="px-4 py-6 space-y-3">
               <Link 
                 to="/" 
-                className="block text-lg font-medium hover:text-primary transition-smooth"
+                className="block text-base font-medium hover:text-primary transition-smooth"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Accueil
               </Link>
               <Link 
                 to="/shop" 
-                className="block text-lg font-medium hover:text-primary transition-smooth"
+                className="block text-base font-medium hover:text-primary transition-smooth"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Boutique
               </Link>
               <Link 
                 to="/about" 
-                className="block text-lg font-medium hover:text-primary transition-smooth"
+                className="block text-base font-medium hover:text-primary transition-smooth"
                 onClick={() => setIsMenuOpen(false)}
               >
                 À propos
               </Link>
               <Link 
                 to="/contact" 
-                className="block text-lg font-medium hover:text-primary transition-smooth"
+                className="block text-base font-medium hover:text-primary transition-smooth"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Contact
               </Link>
+              {!user && (
+                <div className="pt-2 border-t">
+                  <Link 
+                    to="/login"
+                    className="block"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    <Button variant="default" size="sm" className="w-full">
+                      Se connecter
+                    </Button>
+                  </Link>
+                </div>
+              )}
             </div>
           </motion.div>
         )}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,6 +17,10 @@ export default function Register() {
   const navigate = useNavigate();
   const location = useLocation();
   const { toast } = useToast();
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   const from = location.state?.from?.pathname || "/";
 

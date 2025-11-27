@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
@@ -31,9 +31,13 @@ export function Checkout() {
     street: '',
     city: '',
     postalCode: '',
-    country: 'France',
+    country: 'Bénin',
     shippingMethod: 'standard'
   });
+
+  useEffect(() => {
+    scrollTo(0, 0);
+  }, []);
 
   if (!user) {
     return (
@@ -111,7 +115,7 @@ export function Checkout() {
 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Nom */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-sm font-medium mb-2">Prénom</label>
                       <input
@@ -136,9 +140,8 @@ export function Checkout() {
                     </div>
                   </div>
 
-                  {/* Email et téléphone */}
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
+                  {/* Email */}
+                  <div>
                       <label className="block text-sm font-medium mb-2">Email</label>
                       <input
                         type="email"
@@ -149,6 +152,9 @@ export function Checkout() {
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
+
+                  {/* Adresse et téléphone */}
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-sm font-medium mb-2">Téléphone</label>
                       <input
@@ -157,26 +163,26 @@ export function Checkout() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
+                        placeholder='01 ** ** ** **'
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
+                    </div>
+                    {/* Adresse */}
+                    <div>
+                      <label className="block text-sm font-medium mb-2">Rue</label>
+                      <input
+                        type="text"
+                        name="street"
+                        value={formData.street}
+                        onChange={handleInputChange}
+                        required
                         className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
                       />
                     </div>
                   </div>
 
-                  {/* Adresse */}
-                  <div>
-                    <label className="block text-sm font-medium mb-2">Rue</label>
-                    <input
-                      type="text"
-                      name="street"
-                      value={formData.street}
-                      onChange={handleInputChange}
-                      required
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    />
-                  </div>
-
                   {/* Ville, CP, Pays */}
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-2 gap-2">
                     <div>
                       <label className="block text-sm font-medium mb-2">Ville</label>
                       <input
@@ -203,19 +209,15 @@ export function Checkout() {
 
                   <div>
                     <label className="block text-sm font-medium mb-2">Pays</label>
-                    <select
-                      name="country"
-                      value={formData.country}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
-                    >
-                      <option>France</option>
-                      <option>Belgique</option>
-                      <option>Luxembourg</option>
-                      <option>Suisse</option>
-                      <option>Allemagne</option>
-                      <option>Autre</option>
-                    </select>
+                    <input
+                        type="text"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleInputChange}
+                        required
+                        placeholder='Bénin'
+                        className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent"
+                      />
                   </div>
 
                   {/* Méthode de livraison */}
@@ -245,7 +247,7 @@ export function Checkout() {
                         />
                         <div>
                           <p className="font-medium">Livraison express (2-3 jours)</p>
-                          <p className="text-sm text-gray-500">15,00 €</p>
+                          <p className="text-sm text-gray-500">{import.meta.env.VITE_SHIPPING_EXPRESS_PRICE} XOF</p>
                         </div>
                       </label>
                     </div>
@@ -311,13 +313,13 @@ export function Checkout() {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Livraison</span>
                     <span className="font-semibold">
-                      {formatPrice(formData.shippingMethod === 'express' ? 15 : 0)}
+                      {formatPrice(formData.shippingMethod === 'express' ? parseInt(import.meta.env.VITE_SHIPPING_EXPRESS_PRICE) : 0)}
                     </span>
                   </div>
                   <div className="flex justify-between pt-4 border-t">
                     <span className="font-bold">Total</span>
                     <span className="text-2xl font-bold text-primary">
-                      {formatPrice(totalPrice + (formData.shippingMethod === 'express' ? 15 : 0))}
+                      {formatPrice(totalPrice + (formData.shippingMethod === 'express' ? parseInt(import.meta.env.VITE_SHIPPING_EXPRESS_PRICE) : 0))}
                     </span>
                   </div>
                 </div>

@@ -9,6 +9,8 @@ import { authMiddleware, AuthRequest } from '../middlewares/auth.middleware';
 import Order from '../models/Order';
 import { Payment } from '../models/Payment';
 import { OrderAddress } from '../models/types';
+import emailService from '../services/email.service';
+import invoiceService from '../services/invoice.service';
 
 const router = Router();
 
@@ -147,6 +149,70 @@ router.post('/verify', async (req: Request, res: Response) => {
         status: 'paid',
         transactionId: verifyResult.transactionId,
       });
+
+      // Send order confirmation email with invoice in background (non-blocking)
+      console.log(`📧 Payment verified for order ${order.id} - Sending confirmation email...`);
+      (async () => {
+        try {
+          const customerEmail = order.customerEmail || payment.customerEmail;
+          const customerName = order.customerName || 'Client';
+
+          if (!customerEmail) {
+            console.warn(`⚠️ No email found for order ${order.id}`);
+            return;
+          }
+
+          console.log(`🔄 Generating invoice for order ${order.id}...`);
+
+          // Prepare invoice data
+          const orderItems = Array.isArray(order.items) ? order.items : [];
+          const shippingAddress = order.shippingAddress || {
+            street: '',
+            city: '',
+            postalCode: '',
+            country: '',
+          };
+
+          const invoiceData = {
+            orderNumber: `SHC-${(order.id || 0).toString().padStart(6, '0')}`,
+            orderDate: order.createdAt || new Date(),
+            customerName: customerName,
+            customerEmail: customerEmail,
+            customerPhone: order.customerPhone || payment.customerPhone,
+            shippingAddress: {
+              street: (shippingAddress as any)?.street || '',
+              city: (shippingAddress as any)?.city || '',
+              postalCode: (shippingAddress as any)?.postalCode || (shippingAddress as any)?.zipCode || '',
+              country: (shippingAddress as any)?.country || '',
+            },
+            items: orderItems.map((item: any) => ({
+              productName: `Product #${item.productId}`,
+              quantity: item.qty || item.quantity || 1,
+              price: Number(item.price) || 0,
+              total: (Number(item.price) || 0) * (item.qty || item.quantity || 1),
+            })),
+            subtotal: Number(order.amount) || Number(order.total) || 0,
+            shippingCost: 0,
+            tax: 0,
+            total: Number(order.total) || Number(order.amount) || 0,
+            paymentStatus: 'completed' as const,
+          };
+
+          console.log(`📄 Invoice data prepared for order ${order.id}`);
+
+          // Send email with invoice
+          console.log(`📧 Sending order confirmation email to ${customerEmail}...`);
+          await emailService.sendOrderConfirmationEmail(
+            customerEmail,
+            customerName,
+            order
+          );
+          console.log(`✅ Order confirmation email sent successfully for order ${order.id}`);
+        } catch (emailError) {
+          console.error(`❌ Failed to send order confirmation email for order ${order.id}:`, emailError);
+          // Don't fail the payment if email fails
+        }
+      })();
     }
 
     kkiapayService.logTransaction(reference, {
